@@ -1,0 +1,73 @@
+extends ../master
+
+include ../mixins/_contentHeader    
+
+block content
+    .inner__overlay.to-mid
+    +contentHeader(title)
+    .container-fluid.content__container.content__container-js.to-mid
+        .container
+            .content__inner.toc-academy__inner
+                .col-xs-2
+                .col-xs-8.topic-single
+                    form(action=`/toc-academy/search?_csrf=${csrftoken}` method='GET')
+                        input.form-control(type='text' name='query' value=query placeholder='Search... ')
+                        input(type='submit' value='Search') 
+
+                    if(results && results.length > 0)
+                        each post, index in results
+                            if(post.acf.general)
+                                - const {image__avatar} = post.acf.general[0]
+                                .search-result
+                                    if(post.inTitle)
+                                        span.in-title!= `<strong>${query}</strong> found in post title` 
+                                    if(post.inText)
+                                        span.in-text!= `<strong>${query}</strong> found in post text`
+                                .row.topic__row(class=`topic__row-${index}`)
+                                    .topic__inner-overlay(class=`inner-${index}`)
+                                        .topic__inner-overlay-inner
+                                            .topic__inner-author
+                                                div
+                                                    strong Author / source:  
+                                                div
+                                                    if(post.acf.general[0].details_resource)
+                                                        span!= post.acf.general[0].details_resource[0].authorsource
+                                            if(user && user.isAdmin)
+                                                .post-sticky
+                                                    strong Sticky: 
+                                                    span!= post.sticky ? '&0x2714' : '&times;'
+
+                                        .topic__inner-overlay-inner
+                                            a.topic__inner-overlay-source-url(href=post.acf.general[0].source_url target='_blank') 
+                                                i.fa.fa-link
+                                            span.topic__inner-overlay-arrow &darr;
+
+                                        .topic__inner-overlay-inner
+                                            if(post.acf.general[0].details_resource)
+                                                span.text-right!= post.acf.general[0].details_resource[0].publication_date 
+                                            a.text-right(href=`mailto:${post.acf.about_you[0].email_address}`)!= post.acf.about_you[0].name
+                                    
+                                    .topic__inner-overlay.trigger(class=`trigger-${index}`)
+                                        span.text-center &uarr;
+                                        
+                                    a.topic-post(href=`/toc-academy/posts/${post.slug}`)
+                                        .col-xs-3
+                                            .topic-single__avatar.toc-academy-avatar(
+                                                class=image__avatar ? '' : 'no-image'
+                                                style=image__avatar ? `background-image:url('${image__avatar}')` : ''
+                                                data-name=post.acf.general[0].title_of_your_postresource.charAt(0)
+                                            )
+                                        .col-xs-9
+                                            h3
+                                                i.fa.fa-user 
+                                                span.fa-padding-left-from-icon!= post.acf.general[0].title_of_your_postresource
+
+                                            p!= post.acf.the_resource[0].summary
+
+                    else 
+                        h1 Your query returned no results, try again!
+                .col-xs-2
+                    
+                br
+                a.button(href='/toc-academy') &larr; Back to all topics
+                    

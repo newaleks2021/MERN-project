@@ -1,0 +1,26 @@
+mixin inviteStakeholderAsRoleToTocModal(stakeholder, userTocs)
+    - const roles = ['admin', 'moderator', 'member'];
+    .container.modal__container.modal__container--invite-as-member-to-toc.to-foreground  
+        .modal__overlay
+            .modal.modal--invite-as-member-to-toc
+                span.modal--closer &times;
+                .modal__inner 
+                    h2 #{__('views.page-titles.add-toc-role')}
+                    form(action=`/stakeholders/${stakeholder.username}/invite-as-role-to-toc?_csrf=${csrfToken}` method='POST')
+                        .form-group
+                            label(for="toc_id") #{__('views.role.choose-toc')}
+                            select(name="toc_id")
+                                each toc in userTocs
+                                    option(value=toc.uuid)!=toc.name
+                        
+                        .form-group
+                            label(for="role") #{__('views.role.choose-role')}
+                            select(name="role")
+                                each role in roles
+                                    option(value=role)!=role
+
+                        .form-group
+                            input.btn.button(type="submit" value=__('views.navigation.invite-toc-member'))
+
+
+    

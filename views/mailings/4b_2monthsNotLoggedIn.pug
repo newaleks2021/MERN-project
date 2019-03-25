@@ -1,0 +1,64 @@
+//- Mailing 4B: Little nudge to users who haven't logged in for 2 months
+//- Template: SENDGRID_INFORMATIONAL_TEMPLATE_ID (no button, 1 body)
+//- CRON logic: Sends to all users who haven't logged in for 2 months
+//- User needs to be 'activated'.
+
+if(hasOrgOrToc)
+    p!=`Hi ${stakeholder.full_name},`
+    p Is anything wrong?
+    p We noticed you haven’t logged in for a while.
+
+    p As a reminder, Changeroo let’s you:
+    ul
+        li Co-create engaging ToCs with stakeholders
+        li Share ideas with others quickly
+        li Access your ToCs from anywhere
+
+    p You joined Changeroo to develop high-quality Theories of Change that let you:
+    span - Plan, monitor, evaluate and measure your impact
+    br
+    span - Engage stakeholders and communicate easily
+    br
+    span - Strategize and learn about social and environmental value creation
+    br
+    span - Form and manage partnerships
+
+    p In essence, to help you create a more credible, achievable and supported ToC with Changeroo.
+    span If you need more help,
+    =' '
+    a(
+        href=`${process.env.PROTOCOL}${host}/toc-academy/posts/changeroo-tutorial-overview`, 
+        aria-label=`watch helpful tips here.`
+    ) watch helpful tips here.
+    p Regards,
+    p - The Changeroo crew
+    span P.S. Are we missing something?
+    =' '
+    a(
+        href=`${process.env.PROTOCOL}${host}/contact`, 
+        aria-label=`Tell us what you think of Changeroo.`
+    ) Tell us what you think of Changeroo.
+else
+    p!=`Hi ${stakeholder.full_name},`
+    p We haven’t seen you for a while.
+    p Did you know you can comment and contribute to dozens, even hundreds, of public Theories of Change? 
+    p
+        strong Your 60-second suggestion could actually make a real impact in the world.
+    p For example, some organisations aim to change the world by training small farmers, protecting forests and educating children worldwide.
+    p What if your one idea made all the difference? 
+    p With your feedback these organisations can make their Theories of Change more effective, impactful, and ultimately, improve the world.
+    p Make your mark now.
+    p
+        a(
+            href=`${process.env.PROTOCOL}${host}/tocs`, 
+            aria-label=`Explore Theories of Change and contribute.`
+        ) Explore Theories of Change and contribute.
+    p Regards,
+    br
+    span - The Changeroo crew
+    p P.S. Are we missing something?
+    =' '
+    a(
+        href=`${process.env.PROTOCOL}${host}/contact`, 
+        aria-label=`Tell us what you think of Changeroo.`
+    ) Tell us what you think of Changeroo.

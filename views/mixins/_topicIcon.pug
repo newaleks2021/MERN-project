@@ -1,0 +1,40 @@
+mixin topicIcon(topic, sticky, changerooResource)
+    if(sticky)
+        i.fa.fa-thumbtack
+
+    else if(changerooResource)
+        img(height=12
+            width=12
+            src='https://changeroo.com/favicon.ico'
+        )
+
+    else if(topic === "Webinar / video")
+        i.fa.fa-video
+
+    else if(topic === "Manual")
+        i.fa.fa-address-book
+
+    else if(topic === "Case study")
+        i.fa.fa-graduation-cap
+
+    else if(topic === "Blog post")
+        i.fab.fa-blogger-b
+
+    else if(topic === "Presentation deck")
+        i.fa.fa-desktop
+
+    else if(topic === "Article / report")
+        i.fa.fa-paperclip
+
+    else if(topic === "Book")
+        i.fa.fa-book
+
+    else if(topic === "Tool")
+        i.fa.fa-wrench
+
+    else if(topic === "Event (a future event)")
+        i.fas.fa-calendar-alt
+
+    else
+        i.fa.fa-question
+

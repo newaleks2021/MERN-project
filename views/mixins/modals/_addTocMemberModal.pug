@@ -1,0 +1,28 @@
+mixin addTocMemberModal(toc)
+    - const roles = ['admin', 'moderator', 'member'];
+    .container.modal__container.modal__container--add-toc-member.to-foreground  
+        .modal__overlay
+            .modal.modal--add-toc-member
+                span.modal--closer &times;
+                .modal__inner
+                    h2 Invite a member to #{toc.name}
+                    .modal--form 
+                        form.new-toc-member__form(action=`/tocs/${toc.uuid}/add-member?_csrf=${csrfToken}` method='POST')
+                            .form-group
+                                label(for="email") 
+                                    i.fas.fa-columns(aria-hidden="true" title=__('views.stakeholder.user-email-label'))
+                                    span.fa-padding-left-from-icon #{__('views.stakeholder.user-email-label')}
+                                input.form-control(type="text" name="email")   
+
+                            .form-group
+                                label(for="role") #{__('views.role.choose-role')}
+                                select(name="role")
+                                    each role in roles
+                                        option(value=role)!=role
+                            br
+
+                            input.btn.button(type="submit" value=__('views.navigation.invite-toc-member'))
+
+
+                
+                

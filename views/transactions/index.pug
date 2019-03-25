@@ -1,0 +1,151 @@
+extends ../master
+
+include ../mixins/_contentHeader
+include ../mixins/_pagination
+include ../mixins/modals/_confirmationModal
+
+block content
+    -
+      const formatMoney = function(n, c, d, t){
+        var c = isNaN(c = Math.abs(c)) ? 2 : c, 
+        d = d == undefined ? "," : d, 
+        t = t == undefined ? "." : t, 
+        s = n < 0 ? "-" : "", 
+        i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
+        j = (j = i.length) > 3 ? j % 3 : 0;
+        
+        return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+      };
+
+    .inner__overlay.to-mid
+    +contentHeader(title)
+    .container-fluid.content__container.content__container-js.to-mid
+        .container
+            .content__inner
+                .dashboard
+                    .row.dashboard__section
+                        if(transactions)
+                            .search-container.col-xs-6.no-padding
+                                input.search-input(placeholder='search...' name='search' type='text' data-url=url)
+                                a.search-submit
+                                    i.fa.fa-search.fa-padding-left
+                            
+                            .table-scroll.col-xs-6.no-padding
+                                p
+                                    i.fas.fa-arrows-alt-h
+                                    span.fa-padding-left Scroll left and right to see more
+                            .table__wrapper        
+                                table.transactions__table.table
+                                    tr
+                                        th
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'id' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=id&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.transaction.id')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'status' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=status&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.transaction.status')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'paylane_id' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=paylane_id&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.transaction.paylane-id')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'amount_ex_vat' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=amount_ex_vat&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.transaction.amount-ex-vat')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'amount_inc_vat' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=amount_inc_vat&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.transaction.amount-inc-vat')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'plan_name' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=plan_name&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.plan.plan-name2')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'organisation_name' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=organisation_name&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.organisation.organisation-name2')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'stakeholder_username' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=stakeholder_username&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.stakeholder.user')}
+                                        
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'coupon_code' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=coupon_code&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.coupon.code')}
+                                        
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'created_at' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=created_at&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.coupon.created-at')}
+
+                                        
+                                    each transaction, index in transactions
+                                        tr
+                                            td
+                                                a(
+                                                    target='_blank',
+                                                    href=`/organisations/${transaction.organisation_slug}/transaction/${transaction.id.toString().length}/${transaction.id}${transaction.paylane_id}/pdf`
+                                                )
+                                                    i.far.fa-file-pdf
+
+                                            td 
+                                                p!=transaction.id
+
+                                            td
+                                                p!=`${transaction.status.charAt(0) + transaction.status.slice(1).toLowerCase()}`
+
+                                            td
+                                                p!=transaction.paylane_id
+
+                                            td
+                                                p!=`€${formatMoney(transaction.amount_ex_vat, 2)}`
+
+                                            td
+                                                p!=`€${formatMoney(transaction.amount_inc_vat, 2)}`
+
+                                            td
+                                                p!=transaction.plan_name
+
+                                            td
+                                                a(href=`/organisations/${transaction.organisation_slug}`)!=transaction.organisation_name 
+
+                                            td
+                                                a(href=`/stakeholders/${transaction.stakeholder_username}`)!=transaction.stakeholder_username
+
+                                            td 
+                                                if(transaction.coupon_code)
+                                                    p!=transaction.coupon_code
+                                                else
+                                                    p None
+
+                                            td
+                                                p!=`${transaction.created_at.toISOString().slice(0, 10)}`
+
+                                +pagination(
+                                    pagination, 
+                                    url
+                                )
+
+                        else 
+                            h3 No transactions

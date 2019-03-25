@@ -1,0 +1,288 @@
+html[data-page="pricing"] {
+
+    body {
+        padding: 0;
+        #root > nav { display: none; z-index: -1; }
+        .page-content { padding: 72px 0 0;}
+    }
+
+    section {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        &.introduction {
+            height: 828px;
+            padding: 100px 0 0;
+            background-color: $blue-turquoise;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            flex-direction: column;
+            h1 {
+                color: white;
+                font-size: 50px;
+                width: 763px;
+                max-width: 615px;
+                display: block;
+                text-align: center;
+                font-family: $roboto;
+                font-weight: 500;
+            }
+            p {
+                font-family: $roboto;
+                font-size: 24px;
+                font-weight: 300;
+                text-align: center;
+                color: white;
+            }
+            .functionality {
+                padding: 50px 0;
+                margin: 20px 0;
+                width: 800px;
+                border-top: 1px solid white;
+                border-bottom: 1px solid white;
+                .row {
+                    padding: 0 20px;
+                }
+                label {
+                    font-family: $roboto;
+                    font-size: 18px;
+                    font-weight: 500;
+                    padding: 0 0 0 40px;
+                    font-style: normal;
+                    font-stretch: normal;
+                    line-height: 2.06;
+                    position: relative;
+                    letter-spacing: normal;
+                    color: white;
+                    &::before {
+                        width: 16px;
+                        height: 16px;
+                        position: absolute;
+                        top: 10px;
+                        left: 0;
+                        display: inline-block;
+                        content: "";
+                        background-image: url('/check-black.svg');
+                        background-size: contain;
+                        background-position: center center;
+                    }
+                }
+            }
+        }
+        &.picker {
+            flex-direction: column;
+            align-items: center;
+            padding: 50px 0;
+            small {
+                width: 250px;
+                font-family: $roboto;
+                font-size: 18px;
+                font-weight: 300;
+                margin: 20px 0;
+            }
+            h2 {
+                font-size: 32px;
+            }
+            > p {
+                max-width: 787px;
+                font-weight: 300;
+                line-height: 1.46;
+                font-size: 24px;
+                text-align: center;
+                a { color: $tomato; font-weight: 500;}
+            }
+            small {
+                font-size: 18px;
+                font-weight: 300;
+                line-height: 1.22;
+            }
+            .options {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                padding: 30px 0;
+                > p {
+                    width: 738px;
+                    font-family: $roboto;
+                    font-size: 24px;
+                    font-weight: 300;
+                    font-style: normal;
+                    font-stretch: normal;
+                    line-height: 1.46;
+                    letter-spacing: normal;
+                    text-align: center;
+                }
+            }
+            .option {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 340px;
+                height: 445px;
+                border-radius: 5px;
+                box-shadow: 0 2px 7px 2px rgba(0, 0, 0, 0.22);
+                border: solid 1px $tomato;
+                background-color: var(--white);
+                margin: 0 20px;
+                &.subscription {
+                    background-color: $tomato;
+                    h3 { color: white; border-color: white; }
+                    p { color: white; }
+                }
+                h3 {
+                    height: 100px;
+                    line-height: 100px;
+                    width: 100%;
+                    padding: 0;
+                    text-align: center;
+                    color: $tomato;
+                    margin: 0 0 25px 0;
+                    font-size: 32px;
+                    font-weight: 300;
+                    border-bottom: 1px solid $tomato;
+                }
+                label {
+                    font-family: $roboto;
+                    font-size: 24px;
+                    font-weight: 500;
+                    line-height: 1.58;
+                    letter-spacing: normal;
+                    text-align: center;
+                    color: $tomato;
+                    display: block;
+                    text-align: center;
+                }
+                p {
+                    font-size: 18px;
+                    text-align: center;
+                    max-width: 227px;
+                    color: $tomato;
+                    font-weight: 300;
+                }
+                button {
+                    width: 250px;
+                    color: $tomato;
+                    height: 43px;
+                    margin: auto auto 30px;
+                    border-radius: 5px;
+                    box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.22);
+                    border: solid 0.5px $tomato;
+                    background-color: $grey-pale;
+                    align-self: flex-end;
+                    justify-self: center;
+                    font-family: $roboto;
+                    font-size: 16px;
+                    font-weight: 500;
+                }
+            }
+        }
+        &.academy {
+            flex-direction: row;
+            display: flex;
+            justify-content: center;
+            height: 303px;
+            padding: 50px 0;
+            background-color: $grey-coal;
+            .icon {
+                width: 203px;
+                height: 203px;
+                margin: 0 50px 0 0;
+                display: inline-block;
+                background-image: url('/graduate-cap.svg');
+                background-size: contain;
+                background-repeat: no-repeat;
+            }
+            .content {
+                max-width: 700px;
+                h2 {
+                    width: 310px;
+                    font-size: 32px;
+                    font-weight: bold;
+                    color: white;
+                    line-height: 1.19;
+                }
+                p {
+                    width: 781px;
+                    font-family: $roboto;
+                    font-size: 24px;
+                    font-weight: 300;
+                    line-height: 1.46;
+                    color: white;
+                    a { color: $blue-turquoise; font-weight: 500;}
+                }
+            }
+        }
+    }
+
+    .page-content { padding: 0; }
+
+    @media(max-width: $breakpoint-tablet) {
+
+        section {
+            &.introduction {
+                height: auto;
+                padding: 20px 0;
+                .functionality {
+                    width: 100%;
+                    padding: 20px 0 20px 30px;
+                    flex-direction: column;
+                    label {
+                        display: flex;
+                    }
+                    .row {
+                        flex-wrap: wrap;
+                    }
+                }
+            }
+            &.picker {
+                .options {
+                    .option {
+                        margin: 0 0 30px 0;
+                    }
+                }
+            }
+        }
+
+    }
+
+    @media(max-width: $breakpoint-mobile) {
+
+
+        section {
+            &.introduction {
+                padding: 20px 0;
+                h1 {
+                    width: auto;
+                }
+                .functionality {
+                    padding: 20px 0;
+                }
+            }
+            &.picker {
+                .options {
+                    flex-direction: column;
+                }
+                h2 {
+                    padding: 0 20px;
+                }
+                p {
+                    text-align: left;
+                    padding: 0 20px;
+                }
+            }
+            &.academy {
+                flex-direction: column;
+                height: auto;
+                align-items: center;
+                .content {
+                    padding: 0 20px;
+                    p { width: auto; }
+                }
+            }
+        }
+
+    }
+
+}
+

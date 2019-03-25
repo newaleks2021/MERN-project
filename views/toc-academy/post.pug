@@ -1,0 +1,111 @@
+extends ../master
+
+include ../mixins/_contentHeader    
+
+block content
+    .inner__overlay.to-mid
+    +contentHeader()
+    .container-fluid.content__container.content__container-js.to-mid
+        .container.Wysiwyg
+            .content__inner.toc-academy__inner
+                .row
+                    .col-xs-8
+                        if(post)
+                            - const {summary, full_post_text} = Object.assign(...post.acf.the_resource);
+                            - const {image__avatar} = post.acf.general[0]
+                            .toc-academy__single-post-avatar.toc-academy-avatar(
+                                class=image__avatar ? '' : 'no-image'
+                                style=image__avatar ? `background-image:url('${image__avatar}')` : ''
+                                data-name=post.acf.general[0].title_of_your_postresource.charAt(0)
+                            )
+                            h3.toc-academy__single-post-title!= post.acf.general[0].title_of_your_postresource
+                            br
+                            div.single-post!= full_post_text
+
+                            br
+                            br
+                            if(post.acf && post.acf.accepted_for_publication == true)
+                                a.button(href=`/toc-academy/topics/${topic.uuid}`) &larr; Back to topic
+                            else
+                                a.button(href=`/toc-academy/topics/nya`) &larr; Back to topic
+                    .col-xs-4.toc-academy__sidebar-wrapper
+                        .toc-academy__sidebar-inner
+                            .row
+                                h4.single-post-sidebar-item
+                                    strong Topic: 
+                                    span!= topic.name
+
+                                if(topic.name === "Events")
+                                    - const {organiser, when, where} = post.acf.general[0].details_events[0]
+                                    h5.single-post-sidebar-item
+                                        strong When:
+                                        br
+                                        i.far.fa-clock
+                                        span.fa-padding-left-from-icon!= when
+                                        br
+                                        br
+
+                                        strong Where:
+                                        br
+                                        i.fa.fa-map
+                                        span.fa-padding-left-from-icon!= where
+                                        br
+                                        br
+
+                                        strong Organiser:
+                                        br
+                                        i.fa.fa-user
+                                        span.fa-padding-left-from-icon!= organiser
+                                        br
+                                        br
+
+                                if(post.acf.general[0].details_resource[0] && post.acf.general[0].details_resource[0].authorsource)
+                                    h5.single-post-sidebar-item
+                                        strong Author / source: 
+                                        br
+                                        span!= post.acf.general[0].details_resource[0].authorsource
+                            
+                                if(post.acf.general[0].source_url)
+                                    h5.single-post-sidebar-item
+                                        a(href=post.acf.general[0].source_url target='_blank') 
+                                            i.fa.fa-link 
+                                            span.fa-padding-left-from-icon Source URL
+                    
+                                .single-post__uploads.single-post-sidebar-item
+                                    if(post.acf.attachments)
+                                        h5 
+                                            strong Uploads
+                                        each upload in post.acf.attachments
+                                            a.single-post__upload(target='_blank' href=upload.url)
+                                                i.fa.fa-link 
+                                                span.fa-padding-left-from-icon!= upload.title
+
+                                if(post.acf.general[0].details_resource[0] && post.acf.general[0].details_resource[0].publication_date )
+                                    h5.single-post-sidebar-item
+                                        strong Publication date: 
+                                        br 
+                                        span!= post.acf.general[0].details_resource[0].publication_date 
+
+                                h5.single-post-sidebar-item
+                                    strong Date added: 
+                                    br 
+                                    span!= `${post.date.split("T")[0]}`
+
+                                .sidebar__languages.single-post-sidebar-item
+                                    each language in post.acf.the_resource[0].language
+                                        span.sidebar__language.active!= language
+                                
+                                if(user && user.isAdmin)
+                                    strong Posted by: 
+                                    br
+                                    a.text-right(href=`mailto:${post.acf.about_you[0].email_address}`)!= post.acf.about_you[0].name
+                                    br
+                                    br
+                                    strong Sticky: 
+                                    span!= post.acf.sticky_key_resource ? '&#x2714' : '&times;'
+                                    br
+                                    br
+                                    a.text-right(
+                                        href=`https://content.changeroo.com/wp-admin/post.php?post=${post.id}&action=edit`
+                                        target='_blank'
+                                    ) Edit post

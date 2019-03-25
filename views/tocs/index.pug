@@ -1,0 +1,134 @@
+extends ../master
+
+include ../mixins/_contentHeader
+include ../mixins/_pagination
+include ../mixins/modals/_confirmationModal
+
+block content
+    .inner__overlay.to-mid
+    +contentHeader(title)
+    .container-fluid.content__container.content__container-js.to-mid
+        .container
+            .content__inner
+                .dashboard
+                    .row.dashboard__section
+                        if(tocs)
+                            .search-container.col-xs-6.no-padding
+                                input.search-input(placeholder='search...' name='search' type='text' data-url=url)
+                                a.search-submit
+                                    i.fa.fa-search.fa-padding-left
+                            
+                            .table-scroll.col-xs-6.no-padding
+                                p
+                                    i.fas.fa-arrows-alt-h
+                                    span.fa-padding-left Scroll left and right to see more
+                                    
+                            .table__wrapper       
+                                table.tocs__table.table
+                                    tr
+                                        th
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'name' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=name&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.toc.toc-name3')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'website' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=website&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.organisation.organisation-website')}
+
+                                        th 
+                                            a.table-header(
+                                                class=`${currentSort == 'organisation_name' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=organisation_name&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.organisation.organisation-name2')}
+
+                                        if(user && user.isAdmin)
+                                            th
+                                                a.table-header(
+                                                    class=`${currentSort == 'isActivated' ? 'active' : ''}` 
+                                                    href=`${baseUrl}sortBy=isActivated&sortOrder=${reverseSortOrder}`
+                                                ) #{__('views.toc.is-activated')}
+                                                
+                                            th
+                                                a.table-header(
+                                                    class=`${currentSort == 'visibility' ? 'active' : ''}` 
+                                                    href=`${baseUrl}sortBy=visibility&sortOrder=${reverseSortOrder}`
+                                                ) #{__('views.toc.visibility')}
+
+                                            th
+                                                a.table-header(
+                                                    class=`${currentSort == 'shouldBeDestroyed' ? 'active' : ''}` 
+                                                    href=`${baseUrl}sortBy=shouldBeDestroyed&sortOrder=${reverseSortOrder}`
+                                                ) #{__('views.toc.should-be-destroyed')}
+
+                                            th
+                                                a.table-header(
+                                                    class=`${currentSort == 'deactivated_at' ? 'active' : ''}` 
+                                                    href=`${baseUrl}sortBy=deactivated_at&sortOrder=${reverseSortOrder}`
+                                                ) #{__('views.stakeholder.deactivated-at')}
+
+                                            th
+                                                a.table-header(
+                                                    class=`${currentSort == 'created_at' ? 'active' : ''}` 
+                                                    href=`${baseUrl}sortBy=created_at&sortOrder=${reverseSortOrder}`
+                                                ) #{__('views.stakeholder.created_at')}
+                                            th
+                                                p #{__('views.table-columns.actions')}
+
+                                        
+                                    each toc, index in tocs
+                                        tr
+                                            td
+                                                .index-view__avatar.avatar(
+                                                    style= toc.avatar ? `background-image:url('/uploads/${toc.avatar}')` : null
+                                                    class= !toc.avatar ? 'avatar--placeholder placeholder--toc' : null
+                                                    data-name=toc.name ? toc.name : 'toc')
+
+                                            td
+                                                a(href=`/tocs/${toc.uuid}`)!=toc.name
+
+                                            td
+                                                p!=toc.website
+
+                                            td
+                                                p!=toc.organisation_name
+
+                                            if(user && user.isAdmin)
+                                                td
+                                                    i.far.fa-circle.tt(
+                                                        data-tooltip=`${toc.isActivated ? __('tooltips.is-activated') : __('tooltips.is-deactivated')}`
+                                                        class=`${toc.isActivated ? 'active' : 'inactive'}`
+                                                    )
+
+                                                td
+                                                    p!=`${toc.visibility ? __('views.toc.toc-visibility-public') : __('views.toc.toc-visibility-private')}`
+
+                                                td
+                                                    p!=toc.shouldBeDestroyed
+                                                td
+                                                    p!=formatDate(toc.deactivated_at)
+
+                                                td
+                                                    p!=formatDate(toc.created_at)
+
+                                                td
+                                                    a(href=`/tocs/${toc.uuid}/edit`)
+                                                        i.fas.fa-pencil-alt.fa-padding-right(aria-hidden="true")
+
+                                                    +confirmationModal(`/tocs/${toc.uuid}/destroy`, `destroy-toc-${toc.uuid}`)
+                                                    a
+                                                        i.fas.fa-trash-alt.fa-padding-right.modal--trigger(
+                                                            aria-hidden="true",
+                                                            data-modal=`confirmation-destroy-toc-${toc.uuid}`
+                                                        )
+                                +pagination(
+                                    pagination, 
+                                    url
+                                )
+
+                        else 
+                            h3 No tocs

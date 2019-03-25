@@ -1,0 +1,55 @@
+extends ../master
+
+include ../mixins/_contentHeader
+include ../mixins/modals/_confirmationModal
+
+block content
+    .inner__overlay.to-mid
+    +contentHeader(title)
+    .container-fluid.content__container.content__container-js.to-mid
+        .container
+            .content__inner
+                br
+                a(href='/support/create').add-link.stakeholder__organisation__add
+                    i.far.fa-plus-square.fa-padding-right(aria-hidden="true")
+                    span #{__('views.navigation.add-support-org')}
+
+                .support-org.dashboard
+                    .row.dashboard__section
+                        if(supportOrganisations)
+                            .table__wrapper
+                                table.plans__table.table
+                                    tr
+                                        th
+                                            p #
+                                        th
+                                            p #{__('views.support-organisation.name')}
+                                        th 
+                                            p #{__('views.table-columns.order')}
+                                        th 
+                                            p #{__('views.table-columns.actions')}
+
+                                    each org, index in supportOrganisations
+                                        
+                                        tr
+                                            td
+                                                p!=(index+1)
+                                            td
+                                                p!=org.name
+        
+                                            td
+                                                a(href=`/support/${org.id}/move-down`)
+                                                    i.fa.fa-angle-down.fa-padding-right(aria-hidden="true") 
+                                                a(href=`/support/${org.id}/move-up`)
+                                                    i.fa.fa-angle-up.fa-padding-right(aria-hidden="true") 
+        
+                                            td
+                                                a(href=`/support/${org.id}/edit`)
+                                                    i.fa.fa-edit.fa-padding-right(aria-hidden="true") 
+                                                    
+                                                +confirmationModal(`/support/${org.id}/destroy`, `destroy-support-org-${org.id}`)
+                                                a
+                                                    i.fas.fa-trash-alt.fa-padding-right.modal--trigger(
+                                                        aria-hidden="true",
+                                                        data-modal=`confirmation-destroy-support-org-${org.id}`
+                                                    ) 

@@ -1,0 +1,72 @@
+//- Mailing 2B: Sent upon creating a Paid Organisation account.
+//- Template: SENDGRID_INFORMATIONAL_TEMPLATE_ID (no button, 1 body)
+
+p!=`Hi ${stakeholder.full_name},`
+p Congratulations.
+p You've made a great decision today. 
+
+p
+  strong Ready to login?
+a(
+    href=`${process.env.PROTOCOL}${host}/stakeholders/${stakeholder.username}/tocs`, 
+    aria-label='Create your Theory of Change'
+) Create your Theory of Change
+= ' '
+span to plan, track and refine your impact strategies for a better world.
+
+p
+  strong Want some help?
+a(
+    href=`${process.env.PROTOCOL}${host}/toc-academy/posts/changeroo-tour-academy`, 
+    aria-label='Watch the tour'
+) Watch the tour
+= '. '
+span You'll learn about the layout, where to find helpful tutorials and more. 
+
+span Visit our
+= ' '
+a(
+    href=`${process.env.PROTOCOL}${host}/toc-academy`, 
+    aria-label='ToC Academy'
+) ToC Academy
+= ' '
+span to
+= ' '
+a(
+    href=`${process.env.PROTOCOL}${host}/toc-academy/posts/changeroo-tutorial-overview`, 
+    aria-label='access tutorials'
+) access tutorials
+= ' '
+span for Changeroo as well as learn more about Theory of Change in general.
+
+p
+  strong Have questions?
+a(
+    href=`${process.env.PROTOCOL}${host}/support`, 
+    aria-label='Get answers'
+) Get answers
+= ' '
+span within 24 business hours from our dedicated support team.
+
+p Regards,
+span - The Changeroo crew
+
+p P.S. Thanks for using our tool. We hope you'll stay in touch! Follow us on 
+a(
+    href='https://twitter.com/changeroo_com'
+    aria-label='Twitter'
+) Twitter
+= ' '
+a(
+    href='https://www.facebook.com/Changeroo-162037981241121/',
+    aria-label='Facebook'
+) Facebook
+= ' '
+span and
+= ' '
+a(
+    href='https://www.linkedin.com/company/changeroo_com/'
+    aria-label='LinkedIn'
+) LinkedIn
+= ' '
+span to keep up to date with new exciting changes.

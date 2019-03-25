@@ -1,0 +1,22 @@
+//- Mailing 8B: Subscription expires in 5 days
+//- Template: SENDGRID_INFORMATIONAL_TEMPLATE_WITH_BUTTON_ID (1 button, 2 bodies)
+//- CRON: Organisation has a subscription plan other than a free account that expires in 5 days. Organisation does NOT have autorenewal activated. Sends email to all organisation admins (users have to be 'activated').
+//- Is een db flag nodig? Lijkt mij niet, of je moet die flag weer resetten wanneer de expiration date van de organisatie wijzigt (zoals bij renewen, upgraden, of als system admin dat direct in organisatie profiel wijzigt).
+
+p!=`Hi ${stakeholder.full_name},`
+p
+    strong Your subscription expires in 5 days.
+
+p Unlike other subscriptions, Changeroo does NOT renew automatically. 
+span That means you need to
+=' '
+a(
+    href=`${process.env.PROTOCOL}${host}/plans/${organisation.slug}`,
+    aria-label='renew your subscription here'
+) renew your subscription here
+='.'
+p Don’t let your account fall inactive.
+p If you don’t renew, your account will be deactivated and you won’t be able to edit your ToCs, share comments, invite users or read feedback from stakeholders.
+------------------------------------
+p Regards,
+span - The Changeroo crew

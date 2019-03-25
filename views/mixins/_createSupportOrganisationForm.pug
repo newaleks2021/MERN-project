@@ -1,0 +1,48 @@
+mixin createSupportOrganisationForm()
+    .support-org__form.form
+        form(action=`/support/create?_csrf=${csrfToken}` method='POST' id='create_support_org_form' enctype='multipart/form-data')
+            .support-org__form-top.row.form__top
+                .col-xs-1
+                .col-xs-10
+                    .col-md-6.col-xs-12
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].name)
+                                p.input__error #{locals.flashes.error[0].name[0]}
+                            label(for="name") #{__('views.support-organisation.name')}
+                            input.form-control(type="text" name="name" value=oldInput.name ? oldInput.name : '')
+                        
+                        .form-group
+                            label(for="logo") #{__('views.support-organisation.logo')}
+                            input.form-control(type="file" name="logo" accept="image/png, image/jpeg")
+
+                        .form-group
+                            label(for="description") #{__('views.support-organisation.description')}
+                            textarea.form-control(
+                                form="create_support_org_form" rows="5" name="description"
+                            ) #{oldInput.description ? oldInput.description : ''}
+
+                        .form-group
+                            label(for="link") #{__('views.support-organisation.link')}
+                            input.form-control(
+                                type="text" name="link" placeholder=__('views.forms.protocol-prefix')
+                                value=oldInput.link ? oldInput.link : ''
+                            )
+
+                    .col-md-6.col-xs-12
+                        .form-group
+                            label(for="specialisation_tags") #{__('views.support-organisation.specialisation-tags')}
+                            span.validation Seperate each tag with a comma ( , )
+                            textarea.form-control(
+                                form="create_support_org_form" rows="5" name="specialisation_tags"
+                            ) #{oldInput.description ? oldInput.description : ''}
+
+                        .form-group
+                            label(for="countries") #{__('views.support-organisation.countries')}
+                            span.validation Seperate each tag with a comma ( , )
+                            textarea.form-control(
+                                form="create_support_org_form" rows="5" name="countries"
+                            ) #{oldInput.countries ? oldInput.countries : ''}
+                            
+                        .form-group 
+                            input.btn.button(type="submit" value=__('views.buttons.save-changes'))
+                                

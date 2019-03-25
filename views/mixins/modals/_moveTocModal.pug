@@ -1,0 +1,20 @@
+mixin moveTocModal(toc)
+    .container.modal__container.modal__container--move-toc.to-foreground  
+        .modal__overlay
+            .modal.modal--move-toc
+                span.modal--closer &times;
+                .modal__inner
+                    h2!=`Move ToC to another organisation`
+                    .modal--form 
+                        form.move-toc__form(action=`/tocs/${toc.uuid}/move?_csrf=${csrfToken}` method='POST')
+                            .form-group
+                                label(for="email") 
+                                    i.fas.fa-columns(aria-hidden="true" title=__('views.stakeholder.user-email-label'))
+                                    span.fa-padding-left-from-icon #{__('views.stakeholder.user-email-label')}
+                                input.form-control(type="text" name="email")   
+
+                            input.btn.button(type="submit" value=__('views.buttons.toc-movement'))
+
+
+                
+                

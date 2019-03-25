@@ -1,0 +1,51 @@
+extends ./master
+
+include ../mixins/_contentHeader
+include ../mixins/_pagination
+include ../mixins/modals/_confirmationModal
+
+block content
+    .inner__overlay.to-mid
+    +contentHeader(title)
+    .container-fluid.content__container.content__container-js.to-mid
+        .container
+            .content__inner
+                .dashboard.stakeholder
+                    .row.dashboard__section.dashboard__section-inner
+                        if(organisations.length == 0)
+                            .dashboard__no-resources
+                        else
+                            .col-xs-12
+                                .dashboard__list.col-xs-12.no-padding
+                                    each organisation in organisations
+                                        if(!organisation.disabled)
+                                            +confirmationModal(`/tocs/${toc.get("uuid")}/move-to-organisation/${organisation.slug}/?token=${query.token}&invitor=${query.invitor}`, `move-${organisation.slug}-toc-to-org`)
+
+                                        a(
+                                            class=!organisation.disabled ? `modal--trigger` : null,
+                                            aria-hidden="true",
+                                            data-modal=`confirmation-move-${organisation.slug}-toc-to-org`
+                                        )
+                                            .stakeholder__organisation(
+                                                class= organisation.disabled ? 'stakeholder__organisation-disabled' : null
+                                            )
+                                                .col-xs-2.no-padding.avatar__wrapper.align-middle
+                                                    .avatar(
+                                                        style= organisation.avatar ? `background-image:url('/uploads/${organisation.avatar}')` : null 
+                                                        class= !organisation.avatar ? 'avatar--placeholder placeholder--organisation' : null
+                                                        data-name=organisation.name
+                                                    )
+                                                .col-xs-8.full-height
+                                                    .organisation__plan__wrapper
+                                                        if(organisation.expired)
+                                                            span.organisation__plan!=`${organisation.plan} (expired)`
+                                                        else if(organisation.plan_id == 1)
+                                                            span.organisation__plan!=`${organisation.plan} (can't move to free trial)`
+                                                        else
+                                                            span.organisation__plan!=`${organisation.plan}`
+                                                    h4.organisation__name!=organisation.name
+                                                    
+                                                .col-xs-2.no-padding.full-height.max-users
+                                                    i.fa.fa-padding-right.fa-cogs
+                                                    h4!=`${organisation.toc_amount}/${organisation.max_tocs}`
+                                                        

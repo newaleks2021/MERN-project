@@ -1,0 +1,120 @@
+include ./mixins/_navUserPanel
+
+doctype html
+html
+    head
+        title= `Changeroo | ${title}`
+        link(href="https://use.fontawesome.com/releases/v5.0.4/css/all.css", rel="stylesheet")
+        link(href='https://fonts.googleapis.com/css?family=Muli', rel='stylesheet')
+        link(href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css', rel='stylesheet')
+        link(rel='stylesheet', href='/dist/style.css')
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        <!--[if lt IE 9]>
+            script(src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js")
+        <![endif]-->
+    body
+        .main__wrapper
+        .container-fluid
+        .inner
+            .inner-bg.to-background
+            // NAVIGATION
+            .navbar
+                .container.navbar__container
+                    ul.navbar-nav.nav
+                        li.menu-item
+                            .logo__wrapper
+                                a(href='/')
+                                    img.logo(width='150' height='55' src='/img/logo.svg')
+                            
+                        li.menu-item.hidden-xs 
+                            a(href='/toc-academy') #{__('views.menu.toc-academy')}
+                        
+                        //- li.menu-item.hidden-xs 
+                        //-     a(href='/support') #{__('views.menu.support')}
+
+                        if !user
+                            li.menu-item.hidden-xs
+                                a(href='/plans') #{__('views.menu.pricing')}
+                
+                    ul.navbar-nav.nav.navbar-right
+                        if(careers == 1 && process.env.WE_ARE_HIRING == 1)
+                            li.menu-item
+                                .logo__wrapper(style='margin:7px 7px 0 0')
+                                    a(href='/careers')
+                                        img.logo(width='60' height='auto' src='../../img/home/werehiring.gif')
+                        if user 
+                            li.menu-item
+                                +navUserPanel(user)
+                        else
+                            li.menu-item.hidden-sm.hidden-md.hidden-lg
+                                +navUserPanel()
+                            li.menu-item.hidden-xs
+                                a(
+                                    href= '/auth/register'
+                                ) #{__('views.menu.signup')}
+                            li.menu-item.hidden-xs
+                                a(href='/auth/login') #{__('views.menu.login')}
+                            
+                                
+                                
+            
+            // FLASH MESSAGES
+            block messages
+                if(locals.flashes && !(locals.flashes.error && typeof locals.flashes.error[0] == 'object'))
+                    each category in Object.keys(locals.flashes)
+                        each message, index in flashes[category]
+                            .flash__wrapper(class=`flash--${category} flash__wrapper--${index}`).to-foreground
+                                .container
+                                    .col-xs-12
+                                        .flash
+                                            span.flash__text!= message
+                                            span.flash__remove(data-flash=index) &times;
+                                            
+            block error
+
+            block auth
+
+            // CONTENT
+            block content
+
+        // FOOTER
+        
+        .footer
+            .container.navbar__container.no-padding
+                ul.nav.col-xs-12.col-md-6.no-padding
+                    li.menu-item
+                        a(href='/partnerships') Partnerships
+
+                    li.menu-item
+                        a(href='/contact') Contact
+
+                    li.menu-item
+                        a(href='/support-form') Support
+                    
+                    li.menu-item
+                        a(href='/privacy') Privacy
+                    
+                    li.menu-item
+                        a(href='/terms') Terms
+
+                    if user
+                        li.menu-item
+                            a(href='/plans') Pricing
+
+                ul.nav.navbar-right.col-xs-12.col-md-6
+                    li.menu-item
+                        span!=`Copyright © 2018 Changeroo, Business for Development BV.`
+
+
+        block scripts
+            script(src="/dist/bundle.js")   
+            if(`${process.env.NODE_ENV}` === 'production')
+                // Global site tag (gtag.js) - Google Analytics
+                script(async='', src='https://www.googletagmanager.com/gtag/js?id=UA-109836753-1')
+                script.
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag() {
+                        dataLayer.push(arguments);
+                    }
+                    gtag('js', new Date());
+                    gtag('config', 'UA-109836753-1');

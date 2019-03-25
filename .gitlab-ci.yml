@@ -1,0 +1,27 @@
+stages:
+    - build
+    - acceptance
+
+variables:
+    STAGING_SERVER: "vm7735.vellance.net"
+    STAGING_PATH: "/data/web/changeroo/changeroo.stage-env.com/portal/changeroo_portal"
+    NODE_PATH: "/usr/lib/node_modules"
+
+before_script:
+    - eval $(ssh-agent -s)
+    - ssh-add <(cat ~/.ssh/id_rsa)
+    - "git submodule update --init --recursive"
+
+deploy-staging:
+    stage: build
+    script:
+      - 'ssh -o ForwardAgent=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t ci@$STAGING_SERVER "$STAGING_PATH/deploy.sh $CI_COMMIT_REF_NAME"'
+    only:
+        - develop
+
+mocha:
+  stage: acceptance
+  script:
+    - 'mocha mocha-tests/**/*.test.js'
+  only:
+    - develop

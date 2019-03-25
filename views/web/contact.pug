@@ -1,0 +1,11 @@
+extends ../master
+
+include ../mixins/_contentHeader    
+include ../mixins/_contactForm    
+
+block content
+    .inner__overlay.to-mid
+    +contentHeader(title)
+    .container-fluid.content__container.content__container-js.to-mid
+        .container.pages__inner
+            +contactForm()

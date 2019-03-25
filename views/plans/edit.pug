@@ -1,0 +1,7 @@
+extends ./master
+
+include ../mixins/_editPlanForm
+
+block planContent
+    .row.dashboard__section.dashboard__section-inner
+        +editPlanForm(plan)

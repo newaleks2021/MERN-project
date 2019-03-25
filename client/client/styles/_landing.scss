@@ -1,0 +1,30 @@
+html[data-page=""], html[data-page="landing"] {
+    
+    div[data-route="page"] {
+        > nav input[type="submit"] { display: none; z-index: -1; }
+    }
+
+    @media(max-width: $breakpoint-tablet) {
+        .tocs-container { 
+            padding: 10px 0 0; 
+            .filters { padding: 15px 0; align-self: stretch; justify-content: flex-start; }
+        }
+    }
+
+    @media(max-width: $breakpoint-mobile) {
+    	.top-nav {
+    		.search { right: 20px; left: 20px; width: auto; }
+            .search > input { width: 100%; }
+    	}
+        .tocs-container { 
+            padding: 10px 0 0; 
+            .filters { padding: 15px 0; margin: 0; align-self: stretch; justify-content: center; }
+        }
+        .toc { 
+            margin: 5px 0; width: 100%; 
+            &.new { height: 100px; line-height: 100px; }
+        }
+       
+    }
+
+}

@@ -1,0 +1,21 @@
+mixin date(date)
+    - 
+      const months = [];
+      months.push(__('mixins.date.january'));
+      months.push(__('mixins.date.february'));
+      months.push(__('mixins.date.march'));
+      months.push(__('mixins.date.april'));
+      months.push(__('mixins.date.may'));
+      months.push(__('mixins.date.june'));
+      months.push(__('mixins.date.july'));
+      months.push(__('mixins.date.august'));
+      months.push(__('mixins.date.september'));
+      months.push(__('mixins.date.october'));
+      months.push(__('mixins.date.november'));
+      months.push(__('mixins.date.december'));
+    
+      const year = date.getFullYear();
+      const month = date.getMonth();
+      const day = date.getDate();
+    
+    span!=`${day} ${months[month]} ${year}`

@@ -1,0 +1,254 @@
+extends ../master
+
+include ../mixins/_contentHeader
+include ../mixins/_date
+include ../mixins/modals/_newPremiumOrganisationModal
+include ../mixins/modals/_newFreeOrganisationModal
+
+block content    
+    .inner__overlay.to-mid
+    +contentHeader(title)
+    .container-fluid.content__container.content__container-js.to-mid.home__inner
+        .container
+            .col-xs-12.plans__contact-changeroo
+                h3.text-center #{__('views.web.subscription-plan')} 
+                if(organisation)
+                    h4.text-center #{__('views.web.organisation', organisation.name)}
+
+                    .profile__stats.dashboard__section.row
+                        .col-xs-3
+                        .col-xs-6
+                            .current-plan-overview
+                                .current-plan-header
+                                    h3!=organisationPlan.name
+                    
+                                .current-plan-feature
+                                    span #{__('views.organisation.expires-on')} 
+                                        +date(organisation.subs_exp_date)
+                                    
+                                .current-plan-feature-alt
+                                    span #{__('views.organisation.maximum-number-of-tocs', organisationPlan.max_tocs)}
+                        
+                                .current-plan-feature
+                                    span #{__('views.organisation.number-of-active-tocs', amountOfActiveTocs)}
+
+                        .col-xs-3
+            
+            .plans__benefits.col-xs-12.plans__row
+                h3.text-center All accounts come with full functionality, including
+                ul.col-xs-6.text-center
+                    li Design your Theory of Change
+                    li Nested ToCs
+                    li Integration of the narrative in your ToC visualisation
+                    li Remote collaboration
+                    li Guiding resources
+                    li Visualisation of your learning process
+
+                ul.col-xs-6.text-center
+                    li Co-creation with stakeholders
+                    li Embed in your website or intranet
+                    li Invite stakeholders for feedback
+                    li Export ToC
+                    li ToC as a living document for adaptive management
+                    li A central place to record updates and changes to your ToC
+                
+            .plans__wrapper 
+                .row
+                    if(user && user.hasUsedFreeTrial == 0 && rankings["Free trial"] >= currentRanking)
+                        .col-md-4.col-xs-12
+                            .plans__plan.row
+                                - const free = plans.find(p => p.name == 'Free trial')
+                                .col-xs-1
+                                .col-xs-10
+                                    h2 Free trial
+                                    .plans__price 
+                                        h4
+                                            span 30 days
+                                        
+                                        h4!= `${free.max_tocs} Theory of Change`
+                                    
+                                    if(user)
+                                        +newFreeOrganisationModal(user)
+                                        a.modal--trigger.button(
+                                            data-modal=`new-free-organisation`
+                                        ) Request plan
+                                .col-xs-1
+                    else if(!user)
+                        .col-md-4.col-xs-12
+                            .plans__plan.row
+                                - const free = plans.find(p => p.name == 'Free trial')
+                                .col-xs-1
+                                .col-xs-10
+                                    h2 Free trial
+                                    .plans__price 
+                                        h4
+                                            span 30 days
+                                        
+                                        h4!= `${free.max_tocs} Theory of Change`
+                                    
+                                    if(user)
+                                        +newFreeOrganisationModal(user)
+                                        a.modal--trigger.button(
+                                            data-modal=`new-free-organisation`
+                                        ) Request plan
+                                .col-xs-1
+
+                    if(rankings["Startup quarterly"] >= currentRanking)
+                        .col-md-4.col-xs-12
+                            .plans__plan.row
+                                - const startupQuarterly = plans.find(p => p.name == 'Startup quarterly')
+                                - const startupYearly = plans.find(p => p.name == 'Startup yearly')
+                                .col-xs-1
+                                .col-xs-10
+                                    h2 Startup 
+                                    .plans__price 
+                                        h4
+                                            span!= `${startupQuarterly.price} ${startupQuarterly.currency} / 3 months`
+
+                                        h4
+                                            span!= `${startupYearly.price} ${startupYearly.currency} / 1 year`    
+                                            
+                                        
+                                        h4!= `${startupYearly.max_tocs} Theory of Change`
+                                    
+                                    if(user)
+                                        if(organisation)
+                                            if(rankings["Startup quarterly"] !== currentRanking)
+                                                a.button(href=`/plans/${startupQuarterly.id}/checkout/${organisation.slug}`) Upgrade quarterly
+
+                                                a.button(href=`/plans/${startupYearly.id}/checkout/${organisation.slug}`) Upgrade yearly
+                                            else if(rankings["Startup quarterly"] === currentRanking && showUpgrade === true)
+                                                a.button(href=`/plans/${startupQuarterly.id}/checkout/${organisation.slug}`) Extend quarterly
+
+                                                a.button(href=`/plans/${startupYearly.id}/checkout/${organisation.slug}`) Extend yearly
+
+                                        else
+                                            +newPremiumOrganisationModal(user, countriesList, plans, startupQuarterly.id, "startupQuarterly")
+                                            a.modal--trigger.button(
+                                                data-modal=`new-premium-organisation-startupQuarterly`
+                                                data-instant-toggle=(newPremiumOrganisationModalErrors["startupQuarterly"])
+                                            ) Request quarterly
+
+                                            +newPremiumOrganisationModal(user, countriesList, plans, startupYearly.id, "startupYearly")
+                                            a.modal--trigger.button(
+                                                data-modal=`new-premium-organisation-startupYearly`
+                                                data-instant-toggle=(newPremiumOrganisationModalErrors["startupYearly"])
+                                            ) Request yearly
+                                .col-xs-1
+                            
+                    if(rankings["Medium quarterly"] >= currentRanking)
+                        .col-md-4.col-xs-12
+                            .plans__plan.row
+                                - const mediumQuarterly = plans.find(p => p.name == 'Medium quarterly')
+                                - const mediumYearly = plans.find(p => p.name == 'Medium yearly')
+                                .col-xs-1
+                                .col-xs-10
+                                    h2 Medium 
+                                    .plans__price 
+                                        h4
+                                            span!= `${mediumQuarterly.price} ${mediumQuarterly.currency} / 3 months`
+
+                                        h4
+                                            span!= `${mediumYearly.price} ${mediumYearly.currency} / 1 year`   
+                                        
+                                        h4!= `${mediumYearly.max_tocs} Theories of Change`
+                                    
+                                    if(user)
+                                        if(organisation)
+                                            if(rankings["Medium quarterly"] !== currentRanking)
+                                                a.button(href=`/plans/${mediumQuarterly.id}/checkout/${organisation.slug}`) Upgrade quarterly
+
+                                                a.button(href=`/plans/${mediumYearly.id}/checkout/${organisation.slug}`) Upgrade yearly
+                                            else if(rankings["Medium quarterly"] === currentRanking && showUpgrade === true)
+                                                a.button(href=`/plans/${mediumQuarterly.id}/checkout/${organisation.slug}`) Extend quarterly
+
+                                                a.button(href=`/plans/${mediumYearly.id}/checkout/${organisation.slug}`) Extend yearly
+                                        else
+                                            +newPremiumOrganisationModal(user, countriesList, plans, mediumQuarterly.id, "mediumQuarterly")
+                                            a.modal--trigger.button(
+                                                data-modal=`new-premium-organisation-mediumQuarterly`
+                                                data-instant-toggle=(newPremiumOrganisationModalErrors["mediumQuarterly"])
+                                            ) Request quarterly
+
+                                            +newPremiumOrganisationModal(user, countriesList, plans, mediumYearly.id, "mediumYearly")
+                                            a.modal--trigger.button(
+                                                data-modal=`new-premium-organisation-mediumYearly`
+                                                data-instant-toggle=(newPremiumOrganisationModalErrors["mediumYearly"])
+                                            ) Request yearly
+
+                                .col-xs-1
+
+                    if(rankings["Large"] >= currentRanking)
+                        .col-md-4.col-xs-12
+                            .plans__plan.row
+                                - const large = plans.find(p => p.name == 'Large')
+                                .col-xs-1
+                                .col-xs-10
+                                    h2 Large
+                                    .plans__price 
+                                        h4
+                                            span!= `${large.price} ${large.currency} / 1 year`   
+                                        
+                                        h4!= `${large.max_tocs} Theories of Change`
+
+                                    if(user)
+                                        if(organisation)
+                                            if(rankings["Large"] !== currentRanking)
+                                                a.button(href=`/plans/${large.id}/checkout/${organisation.slug}`) Upgrade plan
+                                            else if(rankings["Large"] === currentRanking && showUpgrade === true)
+                                                a.button(href=`/plans/${large.id}/checkout/${organisation.slug}`) Extend plan
+
+                                        else
+                                            +newPremiumOrganisationModal(user, countriesList, plans, large.id, "large")
+                                            a.modal--trigger.button(
+                                                data-modal=`new-premium-organisation-large`
+                                                data-instant-toggle=(newPremiumOrganisationModalErrors["large"])
+                                            ) Request plan
+                                .col-xs-1
+                    
+                    if(rankings["XL"] >= currentRanking)
+                        .col-md-4.col-xs-12
+                            .plans__plan.row
+                                - const xl = plans.find(p => p.name == 'XL')
+                                .col-xs-1
+                                .col-xs-10
+                                    h2 XL
+                                    .plans__price 
+                                        h4
+                                            span!= `${xl.price} ${xl.currency} / 1 year`   
+                                        
+                                        h4!= `${xl.max_tocs} Theories of Change`
+
+                                    if(user)
+                                        if(organisation)
+                                            if(rankings["XL"] !== currentRanking)
+                                                a.button(href=`/plans/${xl.id}/checkout/${organisation.slug}`) Upgrade plan
+                                            else if(rankings["XL"] === currentRanking && showUpgrade !== false)
+                                                a.button(href=`/plans/${xl.id}/checkout/${organisation.slug}`) Extend plan
+                                        else
+                                            +newPremiumOrganisationModal(user, countriesList, plans, xl.id, "xl")
+                                            a.modal--trigger.button(
+                                                data-modal=`new-premium-organisation-xl`
+                                                data-instant-toggle=(newPremiumOrganisationModalErrors["xl"])
+                                            ) Request plan
+                                        
+                                .col-xs-1
+                    
+                    .col-md-4.col-xs-12
+                        .plans__plan.row
+                            .col-xs-1
+                            .col-xs-10
+                                h2 Unlimited
+                                .plans__price 
+                                    h4!= `21+ Theories of Change`
+                                
+                                if(user)
+                                    a.button(href='/contact') Contact us
+                            .col-xs-1
+
+            .col-xs-12.plans_academic_pricing
+                .row
+                    br
+                    p.
+                        <b>Academic licensing:</b> For academic institutions that would you like to incorporate Changeroo in their courses, we offer special discounts. 
+                        Please <a href='/contact'>contact</a> us and tell us more about your needs.

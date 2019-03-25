@@ -1,0 +1,67 @@
+extends ../master
+
+include ../mixins/_contentHeader
+include ../mixins/modals/_addPlanModal
+include ../mixins/modals/_confirmationModal
+include ../mixins/_pagination
+
+block content
+    .inner__overlay.to-mid
+    +contentHeader(title)
+    .container-fluid.content__container.content__container-js.to-mid
+        .container
+            .content__inner
+                br
+                +addPlanModal()
+                .add-link.stakeholder__organisation__add.modal--trigger(data-modal='new-plan')
+                    i.far.fa-plus-square.fa-padding-right(aria-hidden="true")
+                    span #{__('views.navigation.create-new-plan')}
+
+                .plan.dashboard
+                    .row.dashboard__section
+                        if(plans)
+                            .table__wrapper
+                                table.plans__table.table
+                                    tr
+                                        th
+                                            p #
+                                        th
+                                            p #{__('views.plan.plan-name3')}
+
+                                        th
+                                            p #{__('views.plan.plan-price3')}
+
+                                        th
+                                            p #{__('views.plan.plan-currency3')}
+                                        
+                                        th
+                                            p #{__('views.plan.plan-period2')}
+
+                                        th
+                                            p #{__('views.plan.plan-max-tocs3')}
+
+                                        th
+                                            p #{__('views.table-columns.actions')}
+
+                                        
+                                    each plan, index in plans
+                                        tr
+                                            td
+                                                p!=(index+1)
+                                            td
+                                                p!=plan.name
+                                            td  
+                                                p!=plan.price
+                                            td
+                                                p!=plan.currency
+
+                                            td
+                                                p!=plan.period
+                                            
+                                            td
+                                                p!=plan.max_tocs
+                                            td
+                                                a(href=`/plans/${plan.id}/edit`)
+                                                    i.fa.fa-edit.fa-padding-right(aria-hidden="true") 
+                                                                            
+                        //- +pagination(pagination, url)

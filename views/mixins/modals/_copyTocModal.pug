@@ -1,0 +1,18 @@
+mixin copyTocModal(toc)
+    .container.modal__container.modal__container--copy-toc.to-foreground  
+        .modal__overlay
+            .modal.modal--copy-toc
+                span.modal--closer &times;
+                .modal__inner
+                    h2!=`Copy ToC`
+                    .modal--form 
+                        form.move-toc__form(action=`/tocs/${toc.uuid}/copy?_csrf=${csrfToken}` method='POST')
+                            .form-group
+                                input(type="checkbox" name="keep_permissions")
+                                label(for="keep_permissions") #{__('views.toc.keep-permissions')}
+
+                            input.btn.button(type="submit" value=__('views.buttons.copy-toc'))
+
+
+                
+                

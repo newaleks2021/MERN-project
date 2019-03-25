@@ -1,0 +1,43 @@
+extends ../master
+
+include ../mixins/_contentHeader
+
+block content
+    .inner__overlay.to-mid
+    +contentHeader(title)
+    .container-fluid.content__container.content__container-js.to-mid
+        .container
+            .col-xs-2
+            .col-xs-8.pages__inner
+                if(process.env.WE_ARE_HIRING == 1)
+                    h2 We are Hiring
+                    br
+                    p.
+                        Write to us at info@changeroo.com if you are interested in the jobs below.
+                    br
+
+                    h3 Intern
+                    p.
+                        We’re after an outstanding intern who will use their passion on the job,
+                        working with one of the biggest brands in the world.
+                    br
+                    h4.
+                        Skill Required:
+                    li Bachelor's in Computer Sciences.
+                    li Prior experience working with web applications.
+                    br
+
+                    h3 Developer
+                    p.
+                        We're after a world class node.js developer
+                    br
+                    h4.
+                        Skill Required:
+                    li Bachelor's in Computer Sciences.
+                    li Prior experience working with web applications.
+                    br
+
+                else
+                    h2 We are currently not hiring for any roles.
+
+            .col-xs-2

@@ -1,0 +1,48 @@
+//- Mailing 7: 30 days after trial expired (so no subscription purchased at any time)
+//- Template: SENDGRID_INFORMATIONAL_TEMPLATE_ID (no button, 1 body)
+//- CRON: For users who:
+//-   * Are 'activated'
+//-   * Free trial boolean op 1.
+//-   * Verbonden aan een organisatie account die ‘free trial’ als subscription plan heeft en 30 dagen geleden als expiration date heeft.
+//-   * Niet verbonden aan een organisatie account met een subscription anders dan free trial.
+//-   * Niet verbonden aan een ToC die onderdeel is van een organisation account met een subscription anders dan ‘free trial’.
+//- Is een db flag ook nodig? In theorie: men kan anders meerdere malen de email krijgen, maar hoe groot is die kans…
+
+p!=`Hi ${stakeholder.full_name},`
+p Last month you tested out Changeroo.
+p The powerful software that lets you manage your impact strategies, by involving countless stakeholders, powerful and intuitive visualisation and communication, and a basis for ongoing strategic learning through analysis and reflection.
+p However, we noticed that you didn’t upgrade. 
+p That’s understandable. 
+p Maybe you weren’t ready for a one year commitment. 
+span If you’d like, you can upgrade for
+=' '
+strong just 3 months
+='.'
+span You get all the features you’ve come to love, including the visual mapping, communication and stakeholder engagement. Plus, our world-class support of course.
+br
+p 
+    a(
+        href=`${process.env.PROTOCOL}${host}/plans/${organisation.slug}`, 
+        aria-label='Try out Changeroo for only 3 months.'
+    ) Try out Changeroo for only 3 months.
+p Regards,
+span - The Changeroo crew
+p P.S. We hope you'll stay in touch! Follow us on 
+a(
+    href='https://twitter.com/changeroo_com'
+    aria-label='Twitter'
+) Twitter
+= ' '
+a(
+    href='https://www.facebook.com/Changeroo-162037981241121/',
+    aria-label='Facebook'
+) Facebook
+= ' '
+span and
+= ' '
+a(
+    href='https://www.linkedin.com/company/changeroo_com/'
+    aria-label='LinkedIn'
+) LinkedIn
+= ' '
+span to keep up to date with new exciting changes.

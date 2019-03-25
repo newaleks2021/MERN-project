@@ -1,0 +1,15 @@
+mixin confirmationModal(url, modalIdentifier, message)
+    .container.modal__container.to-foreground(class=`modal__container--confirmation${modalIdentifier ? '-'+modalIdentifier : ''}`)
+        .modal__overlay
+            .modal(class=`modal--confirmation${modalIdentifier ? '-'+modalIdentifier : ''}`)
+                span.modal--closer &times;
+                .modal__inner 
+                    h2 #{__('views.confirmation-modal.confirmation-question1')}
+
+                    if(message)
+                        div.confirmation-message!= message
+
+                    .modal--confirmation__form
+                        a.button.modal--confirmation__confirm(href=`${url}`) #{__('views.confirmation-modal.confirm')}
+                        a.button.modal--closer #{__('views.confirmation-modal.deny')}
+

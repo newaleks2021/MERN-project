@@ -1,0 +1,213 @@
+include ./modals/_confirmationModal
+
+mixin editStakeholderForm(stakeholder, validations)
+    .stakeholder__form.form
+        form(action=`/stakeholders/${stakeholder.username}/edit?_csrf=${csrfToken}` method='POST' id="edit_stakeholder_form" enctype="multipart/form-data")
+            .stakeholder__form-top.row.form__top
+                .col-xs-1
+                .col-xs-10
+                    .col-md-6.col-xs-12
+                        h3.form__title #{__('views.page-titles.edit-stakeholder')}
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].full_name)
+                                p.input__error #{locals.flashes.error[0].full_name[0]}  
+                            label(for="full_name") #{__('views.stakeholder.fullname2')}
+                            input.form-control(
+                                type="text" name="full_name" value=oldInput.full_name ? oldInput.full_name : stakeholder.full_name
+                            )
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].new_email)
+                                p.input__error #{locals.flashes.error[0].new_email[0]}
+
+                            label(for="new_email")!=`New email (current e-mail: ${stakeholder.email}):`
+                            input.form-control(
+                                type="email" name="new_email" value=oldInput.new_email ? oldInput.new_email : stakeholder.new_email
+                            )
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].location)
+                                p.input__error #{locals.flashes.error[0].location[0]}
+                            label(for="location") #{__('views.stakeholder.location')}
+                            input.form-control(
+                                type="text" name="location" value=oldInput.location ? oldInput.location : stakeholder.location
+                            )
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].function)
+                                p.input__error #{locals.flashes.error[0].function[0]}
+                            label(for="function") #{__('views.stakeholder.function')}
+                            if(validations.function) 
+                                span.validation!= `${validations.function.length.message}`
+                            input.form-control(
+                                type="text" name="function" value=oldInput.function ? oldInput.function : stakeholder.function
+                            )
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].organisation)
+                                p.input__error #{locals.flashes.error[0].organisation[0]}
+                            label(for="organisation") #{__('views.stakeholder.organisation')}
+                            input.form-control(
+                                type="text" name="organisation" value=oldInput.organisation ? oldInput.organisation : stakeholder.organisation
+                            )
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].expertise)
+                                p.input__error #{locals.flashes.error[0].expertise[0]}
+                            label(for="expertise") #{__('views.stakeholder.expertise')}
+                            if(validations.expertise) 
+                                span.validation!= `${validations.expertise.length.message}`
+                            textarea.form-control(
+                                form="edit_stakeholder_form" rows="5" name="expertise"
+                            ) #{oldInput.expertise ? oldInput.expertise : stakeholder.expertise}
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].bio)
+                                p.input__error #{locals.flashes.error[0].bio[0]}
+                            label(for="bio") #{__('views.stakeholder.bio')}
+                            if(validations.bio) 
+                                span.validation!= `${validations.bio.length.message}`
+                            textarea.form-control(
+                                form="edit_stakeholder_form" rows="5" name="bio"
+                            ) #{oldInput.bio ? oldInput.bio : stakeholder.bio}
+                        br
+
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].password)
+                                p.input__error #{locals.flashes.error[0].password[0]}
+
+                            label(for="password") #{__('views.stakeholder.new-password')}
+                            input.form-control(type="password" name="password")
+                        .form-group
+                            label(for="password_secure") #{__('views.stakeholder.repeat-new-password')}
+                            input.form-control(type="password" name="password_secure")
+
+                    .col-md-6.col-xs-12
+                        h3.form__title #{__('views.table-titles.social-media')}
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].website)
+                                p.input__error #{locals.flashes.error[0].website[0]}
+                            label(for="website") #{__('views.social-media.website')}
+                            input.form-control(
+                                type="text" name="website" placeholder=__('views.forms.protocol-prefix')
+                                value=oldInput.website ? oldInput.website : stakeholder.website
+                            )
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].facebook)
+                                p.input__error #{locals.flashes.error[0].facebook[0]}
+                            label(for="facebook") #{__('views.social-media.facebook')}
+                            input.form-control(
+                                type="text" name="facebook" placeholder=__('views.forms.protocol-prefix')
+                                value=oldInput.facebook ? oldInput.facebook : stakeholder.facebook 
+                            )
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].google_plus)
+                                p.input__error #{locals.flashes.error[0].google_plus[0]}
+                            label(for="google_plus") #{__('views.social-media.google-plus')}
+                            input.form-control(
+                                type="text" name="google_plus" placeholder=__('views.forms.protocol-prefix')
+                                value=oldInput.google_plus ? oldInput.google_plus : stakeholder.google_plus 
+                            )
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].instagram)
+                                p.input__error #{locals.flashes.error[0].instagram[0]}
+                            label(for="instagram") #{__('views.social-media.instagram')}
+                            input.form-control(
+                                type="text" name="instagram"  placeholder=__('views.forms.protocol-prefix')
+                                value=oldInput.instagram ? oldInput.instagram : stakeholder.instagram
+                            )
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].linkedin)
+                                p.input__error #{locals.flashes.error[0].linkedin[0]}
+                            label(for="linkedin") #{__('views.social-media.linkedin')}
+                            input.form-control(
+                                type="text" name="linkedin" placeholder=__('views.forms.protocol-prefix')
+                                value=oldInput.linkedin ? oldInput.linkedin : stakeholder.linkedin
+                            )
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].pinterest)
+                                p.input__error #{locals.flashes.error[0].pinterest[0]}
+                            label(for="pinterest") #{__('views.social-media.pinterest')}
+                            input.form-control(
+                                type="text" name="pinterest" placeholder=__('views.forms.protocol-prefix')
+                                value=oldInput.pinterest ? oldInput.pinterest : stakeholder.pinterest
+                            )
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].twitter)
+                                p.input__error #{locals.flashes.error[0].twitter[0]}
+                            label(for="twitter") #{__('views.social-media.twitter')}
+                            input.form-control(
+                                type="text" name="twitter" placeholder=__('views.forms.protocol-prefix')
+                                value=oldInput.twitter ? oldInput.twitter : stakeholder.twitter 
+                            )
+                        br
+
+                        if(stakeholder.avatar)                            
+                            h4 Current avatar:
+                            .form-group
+                                .edit-view__avatar.avatar(
+                                    style= stakeholder.avatar ? `background-image:url('/uploads/${stakeholder.avatar}')` : null 
+                                    class= !stakeholder.avatar ? 'avatar--placeholder placeholder--stakeholder' : null
+                                    data-name=stakeholder.username)
+                                
+                                input(type="checkbox" name="delete_avatar")
+                                label(for="delete_avatar") #{__('views.stakeholder.stakeholder-avatar2')}
+                        br
+
+                        .form-group
+                            label(for="avatar") #{__('views.stakeholder.stakeholder-avatar1')}
+                            input.form-control(type="file" name="avatar" value=stakeholder.avatar accept="image/png, image/jpeg, image/gif")
+                        br
+
+                        .form-group
+                            input.btn.button(type="submit" value=__('views.buttons.save-changes'))
+                        br
+
+                        +confirmationModal(`/stakeholders/${stakeholder.username}/deactivate`, 'deactivate-stakeholder')
+                        .form-group
+                            a.modal--trigger(data-modal='confirmation-deactivate-stakeholder') #{__('views.confirmation-modal.close-stakeholder')}
+                        
+                        if(user.isAdmin)
+                            +confirmationModal(`/stakeholders/${stakeholder.username}/destroy`, 'destroy-stakeholder')
+                            .form-group
+                                i.fa.fa-cross.fa-padding-right(aria-hidden="true") 
+                                a.modal--trigger(data-modal='confirmation-destroy-stakeholder') #{__('views.confirmation-modal.destroy-stakeholder')}
+                            
+                .col-xs-1
+            if(user.isAdmin)
+                .stakeholder__form-bottom.row
+                    .col-xs-1
+                    .col-xs-10.stakeholder__form-admin_fields
+                        .col-xs-12
+                            .form-group
+                                if(locals.flashes.error && locals.flashes.error[0].username)
+                                    p.input__error #{locals.flashes.error[0].username[0]}
+                                label(for="username") #{__('views.stakeholder.username2')}
+                                input.form-control(
+                                    type="text" name="username" 
+                                    value=oldInput.username ? oldInput.username : stakeholder.username
+                                    maxlength=15
+                                )
+                            .form-group
+                                input.io-checkbox(
+                                    type="checkbox" name="isVerified" value=stakeholder.isVerified checked=(stakeholder.isVerified ? true : undefined)
+                                )
+                                label(for="isVerified") #{__('views.stakeholder.is-verified')}
+                            .form-group
+                                input.io-checkbox(type="checkbox" name="isActivated" value=stakeholder.isActivated checked=(stakeholder.isActivated ? true : undefined))
+                                label(for="isActivated") #{__('views.stakeholder.is-activated')}
+                            .form-group
+                                input.io-checkbox(type="checkbox" name="isAdmin" value=stakeholder.isAdmin checked=(stakeholder.isAdmin ? true : undefined))
+                                label(for="isAdmin") #{__('views.stakeholder.is-system-admin')}
+                            .form-group
+                                input.io-checkbox(
+                                    type="checkbox" name="hasUsedFreeTrial" 
+                                    value=stakeholder.hasUsedFreeTrial 
+                                    checked=(stakeholder.hasUsedFreeTrial ? true : undefined))
+                                label(for="hasUsedFreeTrial") #{__('views.stakeholder.has-used-free-trial')}
+                            .form-group
+                                label(for="activated_at") #{__('views.stakeholder.activated-at')}
+                                input(type="datetime" name="activated_at" value=formatFormDate(stakeholder.activated_at))
+
+                    .col-xs-1
+                        
+                
+
+
+
+
+            

@@ -1,0 +1,7 @@
+mixin resendActivationForm()
+    h2.form__title #{__('views.page-titles.resend-activation')}
+    form(action=`/auth/resendactivate?_csrf=${csrfToken}` method="POST")        
+        .form-group
+            label(for="email") #{__('views.stakeholder.email-label2')}
+            input.form-control(type="email" name="email")
+        input.btn.button(type="submit" value=__('views.buttons.resend-button'))

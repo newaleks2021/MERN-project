@@ -1,0 +1,107 @@
+html[data-page="sign-in"], html[data-page="sign-up"], html[data-page="password-forgot"], html[data-page="new-password"]{
+
+    body {
+      padding: 0;
+      #root > nav { display: none; z-index: -1; }
+         
+    }
+
+    section[data-s="sign-in"], section[data-s="sign-up"], section[data-s="password-forgot"], section[data-s="new-password"] {
+        text-align: center;
+        padding: 50px 0;
+        display: block;
+        margin-top: 80px;
+
+        .create-account, .password-forgot, {
+            font-size: $font-size-s;
+            font-family: $roboto;
+            padding: 10px 0;
+            margin: 0 10px;
+            color: $grey-coal;
+            display: inline-block;
+            pointer-events: auto;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        form {
+            background-color: white;
+            -webkit-box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.25);
+            -moz-box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.25);
+            box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.25);
+            padding: 10px 25px 20px;
+            width: 400px;
+            margin: 0 auto;
+            display: inline-block;
+            text-align: left;
+        }
+
+        .error {
+            display: block;
+            color: red;
+            font-size: 15px;
+            padding: 5px 2px;
+            font-style: italic;
+        }
+
+        label {
+            font-size: $font-size-s;
+            text-align: left;
+            font-family: $roboto;
+            padding: 5px;
+            display: inline-block;
+            font-weight: 500;
+            margin: 10px 0 0 0;
+            i {
+                margin: 0 5px 0 0;
+                width: 15px;
+                display: inline-block;
+                height: 15px;
+                background-position: center center;
+                background-size: contain;
+                background-repeat: no-repeat;
+
+            }
+            &.email { i { background-image: url('/icon-email.svg'); }}
+            &.password { i { background-image: url('/icon-password.svg'); }}
+            &.name { i { background-image: url('/icon-user2.svg'); }}
+            &.username { i { background-image: url('/icon-username.svg'); }}
+        }
+
+        input {
+            font-size: 16px;
+            height: 40px;
+            width: 100%;
+            max-width: 400px;
+            line-height: 40px;
+            border-radius: 5px;
+            font-family: $roboto;
+            padding: 0 10px;
+            background-color: white;
+            color: black;
+            &[type="submit"] {
+                margin: 10px 0 0 0;
+                background-color: $tomato;
+                color: white;
+                &:hover {
+                    background-color: lighten($tomato, 5);
+                }
+            }
+        }
+
+    }
+   
+
+    @media(max-width: $breakpoint-tablet) {
+        
+    }
+
+    @media(max-width: $breakpoint-mobile) {
+        section[data-s="sign-in"], section[data-s="sign-up"], section[data-s="password-forgot"],section[data-s="new-password"] {
+            padding: 0;
+            form { width: 100% !important; width: auto; }
+        }
+    }
+
+}

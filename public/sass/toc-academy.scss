@@ -1,0 +1,337 @@
+@import './general/variables.scss';
+@import './general/mixins.scss';
+
+.toc-academy__inner {
+    margin-top: 40px;
+    
+    .toc-academy__topics {
+        display: flex;
+        flex-direction: row;
+
+        .toc-academy__topic {
+            margin-bottom: 30px;
+            height: auto;
+            .toc-academy__topic-inner {
+                border: 1px solid $orangeRed;
+                height: 100%;
+                flex: 1;
+                // border-radius: 10px;
+                h4 {
+                    margin: 0px !important;
+                    font-size: 14px;
+                    padding: 4px;
+
+                    @include ellipsis__multiple-lines(2, 15px, 36px);
+                }
+
+                .toc-academy__topic-show-all {
+                    color: $lightNavy;
+                    font-size: 12px;
+                    display: block;
+                    padding: 0px 4px;
+                    margin-bottom: 5px;
+                }
+                
+                .toc-academy__topic-top {
+                    width: 100%;
+                    height: 80px;
+                    padding: 7px 10px 10px 10px;
+                    border: 1px solid $orangeRed;
+                    background-color: $orangeRed;
+                    color: #fff;
+                    // border-top-right-radius: 10px;
+                    // border-top-left-radius: 10px;
+                }
+
+                .toc-academy__topic-posts {
+                    padding: 0px !important;
+                    margin-top: 0px !important;
+                    margin-bottom: 0px !important;
+                    list-style-type: none;
+                }
+                
+            }
+
+        }
+    }
+
+    .toc-academy__sidebar-wrapper  {
+        .toc-academy__sidebar-inner {
+            margin-left: 20px;
+            
+            .button {
+                background-color: $accentGreen !important;
+                border-color: $accentGreen;
+                margin: 0px auto 20px auto;
+                display: block;
+                text-align: center;
+                color: #fff;
+                // &:hover {
+                    
+                //     background-color: $accentGreen !important;
+                // }
+            }
+
+            form {
+                display: flex;
+                flex-flow: row nowrap;
+
+                .form-group {
+                    width: 50%;
+                }
+            }
+
+            .sidebar__languages {
+                display: flex;
+                flex-flow: row wrap;
+                justify-content: space-between;
+
+                .sidebar__language {
+                    padding: 5px;
+                    color: $lightNavy;
+
+                    &.active {
+                        background-color: $lightNavy;
+                        color: #fff;
+                    }
+                }
+                    
+                
+            }
+        }
+    }
+}
+
+.toc-academy__topic-post {
+    height: 100px;
+    font-size: 12px;
+    border-top: 1px solid $orangeRed;
+    transition: all 0.3s ease-out;
+    &:hover {
+        background-color: lighten($orangeRed, 15%);
+        color: #fff !important;
+    }
+
+    .toc-academy__topic-post-inner {
+        display: block;
+        width: 100%;
+        height: 100%;
+        padding: 5px 5px 5px 0px;
+        overflow: hidden;
+
+        .toc-academy__topic-post-avatar {
+            height: 70px;
+            width: 80%;
+            margin: 10px auto 0px auto;
+
+ 
+        }
+
+        .toc-academy__topic-post-right {
+            padding-top: 5px;
+        }
+
+        .toc-academy__topic-event-title {
+            color: #000;
+            word-break: break-word;
+            i{
+                vertical-align: super;
+            }
+            span {
+                @include ellipsis__single-line(105px);
+            }
+        }
+
+        .toc-academy__topic-post-title {
+            color: #000;
+            word-break: break-word;
+            i{
+                vertical-align: super;
+            }
+            span {
+                @include ellipsis__single-line(235px);
+            }
+        }
+
+        .toc-academy__topic-post-author {
+            color: #606060;
+            font-size: 10px;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .toc-academy__topic-post-summary {
+            font-size: 10px;
+            color: #000;
+            
+            p {
+                @include ellipsis__multiple-lines(2, 12px, 36px);
+            }
+        }
+    }
+}
+
+.toc-academy__single-post-avatar {
+    height: 200px;
+    width: 200px;
+    float: left;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    background-size: contain !important;
+    background-repeat: no-repeat;
+}
+
+.toc-academy__single-post-title {
+    margin: 0px;
+}
+.toc-academy-avatar {
+    background-position: center;
+    height: 150px;
+    background-size: contain;
+    background-repeat: no-repeat;
+
+    &.no-image {
+        background-color: $bordeaux;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        align-items: center;
+        &::before {
+            content: attr(data-name);
+            text-transform: uppercase;
+            font-size: 2em;
+            color: #fff;
+            text-align: center;
+        }
+    }
+}
+.toc-academy__event-meta {
+    font-size: 10px;
+}
+
+.single-post__upload {
+    @include ellipsis__single-line(370px);
+}
+.single-post-sidebar-item {
+    margin-bottom: 20px;
+}
+
+.single-post {
+    h1 { 
+        font-size: 2.5em;
+        margin-top: 60px;
+    }
+
+    h2 {
+        font-size: 2em;
+        margin-bottom: 10px;
+        margin-top: 50px;
+    }
+
+    h3 {
+        font-size: 1.5em;
+        margin-top: 30px;
+        font-style: italic;
+    }
+
+    .topic-single__avatar {
+        height: 150px;
+        background-size: contain;
+        background-repeat: no-repeat;
+    }
+    
+    .topic-post {
+        width: 100%;
+        height: 100%;
+
+        p {
+            color: #000;
+        }
+    }
+}
+
+.row.topic__row {
+    margin-bottom: 30px !important;
+    padding: 15px 15px 25px 15px;
+    border: 1px solid lighten($orangeRed, 25%);
+    position: relative;
+    
+    .topic__inner-overlay {
+        
+        
+        width: 100%;
+        height: 70px;
+        background-color: lighten($orangeRed, 5%);
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        z-index: 9;
+
+        font-size: 12px;
+        color: #fff;
+
+        display: flex;
+        flex-flow: row nowrap;
+        
+        justify-content: space-between;
+        padding:10px 22px;
+        display: none;
+
+        &.trigger {
+            height: 25px;
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: center;
+            align-items: center; 
+            span {
+                text-align: center;
+            }                
+        }
+
+        .topic__inner-overlay-divider, .topic__inner-overlay-inner {
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: center;
+            height: 100%;
+
+            .topic__inner-author {
+                @include ellipsis__single-line(250px);
+            }
+            .topic__inner-overlay-arrow {
+                color: #fff;
+                display: block;
+                margin: 0 auto;
+                
+                cursor: pointer;
+            }
+            .topic__inner-overlay-source-url {
+                display: block;
+                margin: 0 auto;
+            }
+            a {
+                
+                color: darken($lightNavy, 10%);
+            }
+        }
+
+        .topic__inner-overlay-inner {
+            width: 49%;
+        }
+
+        .topic__inner-overlay-divider {
+            width: 2%;
+        }
+    }
+}
+
+.search-result {
+    width: 100%;
+    text-align: right;
+    margin-top: 20px;
+    span {
+        padding: 5px 10px;
+        margin: 0px 3px;
+        background-color: $bordeaux;
+        color: #fff;
+    }
+}

@@ -1,0 +1,96 @@
+mixin navUserPanel(user)
+    .user-panel
+        if(user)
+            .user-panel__nav
+                a.user-panel__full-name #{user.full_name}
+                .user-panel__avatar.avatar(
+                    style= user.avatar ? `background-image:url('/uploads/${user.avatar}')` : null 
+                    class= !user.avatar ? 'avatar--placeholder placeholder--stakeholder' : null
+                    data-name=user.full_name)
+
+        else 
+            i.menu-switch.fa.fa-bars.fa-2x
+                
+        .user-panel__panel.to-foreground
+            ul
+                if(user && user.isAdmin)
+                    li
+                        a(href='/support/all' aria-label=__('views.navigation.all-support'))
+                            i.fa.fa-medkit.fa-padding-right(aria-hidden="true") 
+                            span.fa-padding-left-from-icon #{__('views.navigation.all-support')}
+                    li
+                        a(href='/auth/register' aria-label=__('views.menu.signup'))
+                            i.fas.fa-columns.fa-padding-right(aria-hidden="true") 
+                            span.fa-padding-left-from-icon #{__('views.menu.signup')}
+                    li
+                        a(href='/plans/all' aria-label=__('views.navigation.plans'))
+                            i.fas.fa-columns.fa-padding-right(aria-hidden="true") 
+                            span.fa-padding-left-from-icon #{__('views.navigation.plans')}
+
+                    li
+                        a(href='/stakeholders' aria-label=__('views.navigation.stakeholders'))
+                            i.fa.fa-users.fa-padding-right(aria-hidden="true") 
+                            span.fa-padding-left-from-icon #{__('views.navigation.stakeholders')}
+
+                    li
+                        a(href='/organisations' aria-label=__('views.navigation.organisations'))
+                            i.fa.fa-cogs.fa-padding-right(aria-hidden="true") 
+                            span.fa-padding-left-from-icon #{__('views.navigation.organisations')}
+
+                    li
+                        a(href='/transactions' aria-label=__('views.navigation.transactions'))
+                            i.far.fa-credit-card.fa-padding-right(aria-hidden="true") 
+                            span.fa-padding-left-from-icon #{__('views.navigation.transactions')}
+
+                    li
+                        a(href='/coupons' aria-label=__('views.navigation.coupons'))
+                            i.fas.fa-cart-arrow-down.fa-padding-right(aria-hidden="true") 
+                            span.fa-padding-left-from-icon #{__('views.navigation.coupons')}
+
+                li
+                    a(href='/tocs' aria-label=__('views.page-titles.tocs-index'))
+                        i.fa.fa-cogs.fa-padding-right(aria-hidden="true") 
+                        span.fa-padding-left-from-icon #{__('views.page-titles.tocs-index')}                    
+                
+                li.hidden-sm.hidden-md.hidden-lg
+                    a(href='#') 
+                        i.far.fa-file-alt.fa-padding-right(aria-hidden="true") 
+                        span.fa-padding-left-from-icon #{__('views.menu.toc-academy')}                    
+                    
+
+                if(user)
+                    li
+                        a(href=`/stakeholders/${user.username}/tocs` aria-label=__('views.navigation.tocs1'))
+                            i.fa.fa-cogs.fa-padding-right(aria-hidden="true") 
+                            span.fa-padding-left-from-icon #{__('views.navigation.tocs2')}
+                                
+                    li
+                        a(href=`/stakeholders/${user.username}/organisations` aria-label=__('views.navigation.organisations1'))
+                            i.fa.fa-sitemap.fa-padding-right(aria-hidden="true") 
+                            span.fa-padding-left-from-icon #{__('views.navigation.organisations2')}
+                                
+                    li
+                        a(href=`/stakeholders/${user.username}` aria-label=__('views.navigation.profile1'))
+                            i.fa.fa-user-circle(aria-hidden="true")
+                            span.fa-padding-left-from-icon #{__('views.navigation.profile2')}
+                            
+                    li
+                        a(href='/auth/logout' aria-label="Log out")
+                            i.fas.fa-sign-out-alt.fa-padding-right(aria-hidden=__('views.navigation.logout')) 
+                            span.fa-padding-left-from-icon #{__('views.navigation.logout')}
+                
+                else 
+                    li.hidden-sm.hidden-md.hidden-lg
+                        a(href='/auth/register') #{__('views.menu.signup')}
+                    li.hidden-sm.hidden-md.hidden-lg
+                        a(href='/auth/login') #{__('views.menu.login')}
+                
+                        
+
+
+                
+
+                
+            
+
+    

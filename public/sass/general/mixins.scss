@@ -1,0 +1,20 @@
+@mixin ellipsis() {
+    display: inline-block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+@mixin ellipsis__single-line($maxWidth) {
+    @include ellipsis();
+    white-space: nowrap;
+    max-width: $maxWidth !important;
+}
+
+@mixin ellipsis__multiple-lines($amountLines, $lineHeight, $maxHeight) {
+    @include ellipsis();
+    max-height: $maxHeight;
+    -webkit-line-clamp: $amountLines;
+    line-height: $lineHeight;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+}

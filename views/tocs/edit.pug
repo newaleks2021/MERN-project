@@ -1,0 +1,7 @@
+extends ./master
+
+include ../mixins/_editTocForm
+
+block tocContent 
+    .row.dashboard__section.dashboard__section-inner
+        +editTocForm(toc, members, sessionMember)

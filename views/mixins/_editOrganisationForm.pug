@@ -1,0 +1,158 @@
+include ./modals/_confirmationModal
+
+mixin editOrganisationForm(organisation, members, countriesList)
+    .organisation__form.form
+        form(action=`/organisations/${organisation.slug}/edit?_csrf=${csrfToken}` method='POST' id="edit_organisation_form" enctype="multipart/form-data")
+            .stakeholder__form-top.row.form__top
+                    .col-xs-1
+                    .col-xs-10
+                        .col-md-6.col-xs-12
+                            h3.form__title #{__('views.page-titles.edit-organisation')}
+                            .form-group
+                                if(locals.flashes.error && locals.flashes.error[0].name)
+                                    p.input__error #{locals.flashes.error[0].name[0]}
+                                label(for="name") #{__('views.organisation.organisation-name3')}
+                                input.form-control(
+                                    type="text" name="name" value=oldInput.name ? oldInput.name : organisation.name
+                                )
+                            
+                            .form-group
+                                if(locals.flashes.error && locals.flashes.error[0].address)
+                                    p.input__error #{locals.flashes.error[0].address[0]}
+                                label(for="address") #{__('views.organisation.organisation-address')}
+                                input.form-control(
+                                    type="text" name="address" value=oldInput.address ? oldInput.address : organisation.address
+                                )
+                            
+                            //TODO: selected old input
+                            .form-group
+                                label(for="address") #{__('views.organisation.organisation-country1')}
+                                select.form-control(name="country")
+                                    option(value=null disabled selected=(!organisation.country)) #{__('views.organisation.organisation-country2')}
+                                    each country, index in countriesList
+                                        option(
+                                            value=country.country 
+                                            selected=(organisation.country == country.country)
+                                            )!=`${country.country} | ${country.countryCode}`
+
+                            .form-group
+                                if(locals.flashes.error && locals.flashes.error[0].website)
+                                    p.input__error #{locals.flashes.error[0].website[0]}
+                                label(for="website") #{__('views.organisation.organisation-website')}
+                                input.form-control(
+                                    type="text" name="website" value=oldInput.website ? oldInput.website : organisation.website 
+                                    placeholder=__('views.forms.protocol-prefix')
+                                )
+                            br
+
+                            .form-group
+                                label(for="vat_number") #{__('views.organisation.organisation-vatnr')}
+                                if(organisation.isValidVatNumber)
+                                    span #{__('views.organisation.valid-vat')}
+                                else if ((organisation.vat_number && organisation.vat_number.length > 0) && !organisation.isValidVatNumber)
+                                    span.warning.fa-padding-left-from-icon #{__('views.organisation.organisation-vatnr-warning')}
+                                else if(!!+organisation.hasVatNumber && !organisation.isValidVatNumber)
+                                    span.warning.fa-padding-left-from-icon #{__('views.organisation.organisation-vatnr-warning')}
+                                input.form-control(
+                                    type="text" name="vat_number" value=oldInput.vat_number ? oldInput.vat_number : organisation.vat_number
+                                )
+                            br
+
+                            if(organisation.avatar)
+                                h4 Current avatar:
+                                .form-group
+                                    .edit-view__avatar.avatar(
+                                        style= organisation.avatar ? `background-image:url('/uploads/${organisation.avatar}')` : null 
+                                        class= !organisation.avatar ? 'avatar--placeholder placeholder--organisation' : null
+                                        data-name=organisation.name)
+                                    
+                                    input(type="checkbox" name="delete_avatar")
+                                    label(for="delete_avatar") #{__('views.stakeholder.stakeholder-avatar2')}
+                            br
+
+                            .form-group
+                                label(for="avatar") #{__('views.organisation.organisation-avatar1')}
+                                input.form-control(type="file" name="avatar" accept="image/png, image/jpeg, image/gif")
+
+                        .col-md-6.col-xs-12
+                            h3.form__title #{__('views.table-titles.admins')}
+                            if(members)
+                                .table__wrapper
+                                    table.members__table.table
+                                        tr
+                                            th
+                                                p #
+                                            th
+                                                p #{__('views.table-columns.username')}
+                                            th
+                                                p #{__('views.table-columns.fullname')}
+                                            th
+                                                p #{__('views.table-columns.resend')}
+                                            th
+                                                p #{__('views.table-columns.remove')}
+                                            th 
+                                                p #{__('views.toc.is-activated')}
+                                            
+                                        each member, index in members
+                                            tr
+                                                td
+                                                    p!=(index+1)
+                                                td
+                                                    p!=member.username
+                                                td  
+                                                    p!=member.full_name
+                                                td
+                                                    if(!member.isOrganisationAdmin)
+                                                        a(href=`/stakeholders/${member.username}/resend-invite-to-organisation/${organisation.slug}`)
+                                                            i.fa.fa-envelope
+                                                td
+                                                    +confirmationModal(`/stakeholders/${member.username}/remove-from-organisation/${organisation.slug}`, `remove-${member.username}-from-org`)
+                                                    a.modal--trigger(data-modal=`confirmation-remove-${member.username}-from-org`) &times;
+                                                td
+                                                    i.far.fa-circle.tt(
+                                                            class=`${member.isOrganisationAdmin ? 'active' : 'inactive'}`
+                                                            data-tooltip=`${member.isOrganisationAdmin ? __('tooltips.is-activated') : __('tooltips.is-deactivated')}`
+                                                        )
+                                                    
+                            br
+
+                            if(user.isAdmin)
+                                - const currentPlan = plans.find(p => p.id == organisation.plan_id)
+
+                                .form-group 
+                                    label(for="plan_id") #{__('views.organisation.organisation-current-plan')}
+                                    select.form-control(name="plan_id")
+                                        option(value=null disabled selected=(!organisation.plan_id)) #{__('views.organisation.organisation-default-plan')}
+                                        each plan, index in plans
+                                            option(
+                                                value=plan.id
+                                                selected=(plan.id == currentPlan.id)
+                                                )!=`${plan.name}`
+
+                                .form-group
+                                    label(for="activated_at") #{__('views.organisation.organisation-subs-exp-date')}  
+                                    input(
+                                        type="datetime" name="subs_exp_date" 
+                                        value=oldInput.subs_exp_date ? formatFormDate(oldInput.subs_exp_date) : formatFormDate(organisation.subs_exp_date)
+                                    )
+
+                                .form-group
+                                    label(for="isValidVatNumber") #{__('views.organisation.organisation-isvalidvatnr')}
+                                    input.io-checkbox(type="checkbox" name="isValidVatNumber" value=organisation.isValidVatNumber checked=(organisation.isValidVatNumber ? true : undefined))
+
+                                .form-group
+                                    label(for="isActivated") #{__('views.toc.is-activated')}
+                                    input.io-checkbox(type="checkbox" name="isActivated" value=organisation.isActivated checked=(organisation.isActivated ? true : undefined))
+
+                                +confirmationModal(`/organisations/${organisation.slug}/destroy`, 'destroy-organisation')
+                                .form-group
+                                    a.modal--trigger(data-modal='confirmation-destroy-organisation') #{__('views.confirmation-modal.destroy-organisation')}
+                            
+                            +confirmationModal(`/organisations/${organisation.slug}/deactivate`, 'deactivate-organisation')
+                            .form-group
+                                a.modal--trigger(data-modal='confirmation-deactivate-organisation') #{__('views.confirmation-modal.close-organisation')}
+
+                            .form-group 
+                                input.btn.button(type="submit" value=__('views.buttons.save-changes'))
+                                            
+                    .col-xs-1

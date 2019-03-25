@@ -1,0 +1,61 @@
+extends ../master
+
+include ../mixins/_contentHeader
+include ../mixins/modals/_inviteStakeholderAsAdminToOrganisationModal
+include ../mixins/modals/_inviteStakeholderAsRoleToTocModal
+
+block content
+    .inner__overlay.to-mid
+    +contentHeader(title)
+    .container-fluid.content__container.content__container-js.to-mid
+        .container.no-padding
+            .content__inner
+                .dashboard.stakeholder
+                    .dashboard__functionalities-slider.dashboard__item(data-tooltip='Click to see options').to-foreground
+                        i.fa.fa-cog
+                        span.fa-padding-left Options
+
+                    .dashboard__functionalities
+                        if(userOrganisations && userOrganisations.length > 0 && !(stakeholder.id == user.id))
+                            +inviteStakeholderAsAdminToOrganisationModal(stakeholder, userOrganisations)
+                            .dashboard__functionality.modal--trigger(
+                                    data-modal='invite-as-admin-to-organisation'
+                                )
+                                i.fa.fa-user-plus
+                                span.fa-padding-left #{__('views.navigation.invite-org-admin')}
+
+                        
+                        if(userTocs && userTocs.length > 0 && !(stakeholder.id == user.id))
+                            +inviteStakeholderAsRoleToTocModal(stakeholder, userTocs)
+                            .dashboard__functionality.modal--trigger(
+                                    data-modal='invite-as-member-to-toc'
+                                )
+                                i.fa.fa-user-plus
+                                span.fa-padding-left #{__('views.navigation.invite-toc-member')}
+
+                    .row.dashboard__navigation.dashboard__section
+                        .dashboard__pages
+                            .dashboard__pages-switch.hidden-sm.hidden-md.hidden-lg.dashboard__page.dashboard__item.text-right
+                                i.fa.fa-bars 
+                                span.fa-padding-left Pages
+                            .dashboard__pages-inner.to-background
+                                .dashboard__item.dashboard__page(class=title==`Stakeholder ${stakeholder.full_name}` ? 'active': null)
+                                    a(href=`/stakeholders/${stakeholder.username}`, aria-label=`${stakeholder.full_name} profile`)
+                                        i.fa.fa-user-circle.fa-padding-right(aria-hidden="true") 
+                                        span #{__('views.navigation.profile1')}
+
+            
+                                if(user && (user.id == stakeholder.id || user.isAdmin))
+                                    .dashboard__item.dashboard__page(class=title==`${stakeholder.full_name} organisations` ? 'active' : null)
+                                        a(href=`/stakeholders/${stakeholder.username}/organisations`)
+                                            i.fa.fa-sitemap.fa-padding-right(aria-hidden="true") 
+                                            span #{__('views.navigation.organisations1')}
+
+                                
+                                .dashboard__item.dashboard__page(class=title==`${stakeholder.full_name} tocs` ? 'active' : null)
+                                    a(href=`/stakeholders/${stakeholder.username}/tocs`)
+                                        i.fa.fa-cogs.fa-padding-right(aria-hidden="true") 
+                                        span #{__('views.navigation.tocs1')}
+
+
+                    block stakeholderContent

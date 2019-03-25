@@ -1,0 +1,81 @@
+mixin newCouponModal(plans)
+    .container.modal__container.to-foreground(class=`modal__container--new-coupon`)
+        .modal__overlay
+            .modal(class=`modal--new-coupon`)
+                span.modal--closer &times;
+                .modal__inner 
+                    h2 #{__('views.page-titles.new-coupon')}
+                    .modal--new-coupon__form
+                        if(plans && plans.length > 0)
+                            form.new-coupon__form(
+                                action=`/coupons/create?_csrf=${csrfToken}` method="POST")
+
+                                .form-group
+                                    label(for="code") 
+                                        i.fas.fa-certificate(aria-hidden="true" title=__('views.coupon.code'))
+                                        span.fa-padding-left-from-icon #{__('views.coupon.code')}
+
+                                    input.form-control(maxlength="16" type="text" name="code")
+
+                                .form-group
+                                    label(for="description") 
+                                        i.far.fa-file-alt(aria-hidden="true" title=__('views.coupon.description'))
+                                        span.fa-padding-left-from-icon #{__('views.coupon.description')}
+
+                                    input.form-control(type="text" name="description")
+
+                                .form-group
+                                    label(for="discount_amount") 
+                                        i.fas.fa-euro-sign(aria-hidden="true" title=__('views.coupon.discount-amount'))
+                                        span.fa-padding-left-from-icon #{__('views.coupon.discount-amount')}
+
+                                    input.form-control(type="text" name="discount_amount")
+
+                                .form-group
+                                    label(for="discount_percentage") 
+                                        i.fas.fa-percent(aria-hidden="true" title=__('views.coupon.discount-percentage'))
+                                        span.fa-padding-left-from-icon #{__('views.coupon.discount-percentage')}
+
+                                    input.form-control(type="text" name="discount_percentage")
+
+                                .form-group
+                                    label(for="extension_days") 
+                                        i.fas.fa-plus(aria-hidden="true" title=__('views.coupon.extension-days'))
+                                        span.fa-padding-left-from-icon #{__('views.coupon.extension-days')}
+                                        span.gc-footnote #{__('views.coupon.extension-days-explanation')}
+                                    input.form-control(type="text" name="extension_days")
+
+                                .form-group
+                                    label(for="max_use") 
+                                        i.fas.fa-angle-up(aria-hidden="true" title=__('views.coupon.max-use'))
+                                        span.fa-padding-left-from-icon #{__('views.coupon.max-use')}
+
+                                    input.form-control(type="text" name="max_use")
+
+                                .form-group
+                                    label(for="valid_for") 
+                                        i.far.fa-clock(aria-hidden="true" title=__('views.coupon.valid-for'))
+                                        span.fa-padding-left-from-icon #{__('views.coupon.valid-for')}
+
+                                    input.form-control(type="text" name="valid_for")
+
+                                .form-group
+                                    label(for="exp_date") 
+                                        i.far.fa-calendar(aria-hidden="true" title=__('views.coupon.exp-date'))
+                                        span.fa-padding-left-from-icon #{__('views.coupon.exp-date')} (YYYY-MM-DD)
+                                        
+                                    input.form-control(type="text" name="exp_date")
+
+                                .form-group
+                                    label(for="plan_id") #{__('views.plan.plan-name2')}
+
+                                    select(name="plan_id")
+                                        option(value=0)!=`All plans`
+                                        each plan in plans
+                                            option(value=plan.id)!=plan.name
+                                br
+                                
+                                input.btn.button(type="submit" value=__('views.buttons.new-coupon'))
+
+                
+                

@@ -1,0 +1,46 @@
+mixin contactForm() 
+    .col-xs-12.col-md-5
+        h3 Say hello
+        p Excited about Changeroo? Do you have a question or need help?
+        br 
+        p We can't wait to hear from you! Please use the form or drop us a line by email. We´ll be happy to help you out.
+
+        strong info@changeroo.com
+        br 
+        strong +31 (0) 10 34 000 56
+        br
+        br
+        a.social-icon-orange(style='margin-left: 0px', href='https://www.facebook.com/Changeroo-162037981241121/', target='_blank')
+            i.fab.fa-facebook-square
+        a.social-icon-orange(href='https://twitter.com/changeroo_com', target='_blank')
+            i.fab.fa-twitter-square
+        a.social-icon-orange(href='https://www.linkedin.com/company/changeroo_com/', target='_blank')
+            i.fab.fa-linkedin
+
+    .col-md-1.hidden-xs.hidden-sm
+    .col-xs-12.col-md-6
+        .form
+            form(action=`/contact?_csrf=${csrfToken}` method="POST" id="contact_form")
+                .form-group
+                    if(locals.flashes.error && locals.flashes.error[0].name)
+                        p.input__error #{locals.flashes.error[0].name[0]}  
+                    label(for="email") #{__('views.table-columns.fullname')}
+                    input.form-control(type="text" name="name" placeholder="John Doe" value=name ? name : null)
+                    
+                .form-group
+                    if(locals.flashes.error && locals.flashes.error[0].email)
+                        p.input__error #{locals.flashes.error[0].email[0]}  
+                    label(for="email") #{__('views.stakeholder.email-label2')}
+                    input.form-control(type="text" name="email" placeholder="user@mydomain.com" value=email ? email : null)
+                
+                .form-group 
+                    if(locals.flashes.error && locals.flashes.error[0].message)
+                        p.input__error #{locals.flashes.error[0].message[0]}  
+                    label(for="message") #{__('views.contact.message')}
+                    textarea.form-control(form="contact_form" rows="5" name="message" value=message ? message : null)= message ? message: null
+                br
+
+                .form-group
+                    input.btn.button(type="submit" value=__('views.buttons.contact'))
+
+            

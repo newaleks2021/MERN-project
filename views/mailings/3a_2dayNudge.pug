@@ -1,0 +1,38 @@
+//- Mailing 3A: Sent 2 or 3 days after creating a stakeholder account; to all users (irrespective whether they've created an organisation account); user needs to be 'activated'.
+//- Template: SENDGRID_INFORMATIONAL_TEMPLATE_ID (no button, 1 body)
+//- CRON: Do we need to add a flag for this in the db?
+
+p!= `Hi ${stakeholder.full_name},`
+p Thanks for using our tool!
+p Did you know you can contribute your ideas to dozens of organisations that are designing Theories of Change?
+p As they say, two heads are better than one.
+p That’s why Changeroo makes it easy to join hundreds of people and share your ideas with organisations that are changing the world.
+p
+    a(
+        href=`${process.env.PROTOCOL}${host}/toc-academy/posts/tutorial-share-your-ideas`
+        aria-label=`Learn how to share your ideas now.`
+    ) Learn how to share your ideas now.
+
+p Enjoy,
+br
+span - The Changeroo crew
+
+p P.S. We hope you'll stay in touch! Follow us on 
+a(
+    href='https://twitter.com/changeroo_com'
+    aria-label='Twitter'
+) Twitter
+= ' '
+a(
+    href='https://www.facebook.com/Changeroo-162037981241121/',
+    aria-label='Facebook'
+) Facebook
+= ' '
+span and
+= ' '
+a(
+    href='https://www.linkedin.com/company/changeroo_com/'
+    aria-label='LinkedIn'
+) LinkedIn
+= ' '
+span to keep up to date with new exciting changes.

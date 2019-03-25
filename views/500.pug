@@ -1,0 +1,23 @@
+extends ./master
+
+include ./mixins/_contentHeader
+
+block content
+    .inner__overlay.to-mid
+    +contentHeader('500 server error')
+    .container-fluid.content__container.content__container-js.to-mid
+        .container
+            .col-xs-2
+            .col-xs-8.pages__inner
+                h1 Sorry! Something went wrong...
+                br 
+                h3.
+                    An unexpected error seems to have occured. 
+                    Why not try it once more? Please contact us if the problem persists.
+
+                .not-found__monster
+                
+                h3.not-found__contact.
+                    Interested in Changeroo? We encourage you to <a href='/contact'>say hello</a> as soon as possible. 
+                    We can't wait to hear from you!
+            .col-xs-2

@@ -1,0 +1,159 @@
+extends ../master
+
+include ../mixins/_contentHeader
+
+block content
+    .inner__overlay.to-mid
+    +contentHeader(title)
+
+    .container-fluid.content__container.content__container-js.to-mid.home__inner
+        .container
+            .row
+                .col-md-6
+                    .checkout-box
+                        .checkout-box-header
+                            h3 #{__('views.plan.customer-information')}
+
+                        .checkout-box-content(style='position: relative')
+                            a(style='z-index: 100; position: absolute; top: 5px; right: 5px;', href=`/organisations/${organisation.slug}/edit`, aria-label=__('views.navigation.edit-stakeholder'))
+                                i.fa.fa-edit.fa-padding-right(aria-hidden="true")
+
+                            .row
+                                .col-md-6
+                                    label(for="full_name") #{__('views.stakeholder.user')}
+                                    span!=`${stakeholder.full_name}`
+
+                                .col-md-6
+                                    label(for="email_address") #{__('views.stakeholder.email-label2')}
+                                    span!=`${stakeholder.email}`
+
+                            .row
+                                .col-md-6
+                                    label(for="organisation_name") #{__('views.organisation.organisation-name2')}
+                                    span!=`${organisation.name}`
+
+                                if(organisation.address)
+                                    .col-md-6
+                                        label(for="address") #{__('views.organisation.organisation-address')}
+                                        span!=`${organisation.address}`
+
+                            .row
+                                if(organisation.country)
+                                    .col-md-6
+                                        label(for="country") #{__('views.organisation.organisation-country1')}
+                                        span!=`${organisation.country}`
+
+                                if(organisation.vat_number)
+                                    .col-md-6
+                                        if(organisation.isValidVatNumber)
+                                            label(for="vat_number") #{__('views.organisation.valid-organisation-vatnr')}
+                                        else
+                                            label(for="vat_number") #{__('views.organisation.invalid-organisation-vatnr')}
+
+                                        span!=`${organisation.vat_number}`
+                    .checkout-methods
+                        img(src='/img/home/paylane-methods.png')
+                .col-md-6
+                    .checkout-box
+                        .checkout-box-header
+                            h3 #{__('views.plan.order-summary')}
+
+                        .checkout-box-content
+                            .row
+                                .col-md-8
+                                    h4!=`${plan.name}`
+
+                                .col-md-4.align-right
+                                    h4!=`${currencySymbol}${format.plan}`
+
+                                if(raw.discount > 0)
+                                    .col-md-8
+                                        h4 #{__('views.plan.remaining-days')}
+
+                                    .col-md-4.align-right
+                                        h4!=`- ${currencySymbol}${format.discount}`
+
+                                .col-md-8
+                                    h4!= (coupon) ? `${__('views.plan.discount')} (${coupon.code})` : `${__('views.plan.discount')}`
+
+                                .col-md-4.align-right
+                                    h4!=`- ${currencySymbol}${format.coupon}`
+
+                            hr.checkout-discount-seperator
+
+                            form(
+                                action=`/plans/${plan.id}/checkout/${organisation.slug}/apply-coupon?_csrf=${csrfToken}`  
+                                method="post"
+                            )
+                                .row
+                                    .col-md-9
+                                        input.form-control.checkout-coupon-input(
+                                            placeholder=__('views.plan.enter-coupon'),
+                                            name="coupon",
+                                            type="text"
+                                        )
+
+                                    .col-md-3
+                                        input.btn.button.checkout-coupon-input(
+                                            value=__('views.plan.apply-coupon')
+                                            name="coupon_apply",
+                                            type="submit"
+                                        )
+
+                            hr.checkout-discount-seperator
+                            
+                            .row
+                                .col-md-9
+                                    h4 #{__('views.plan.subtotal')}
+
+                                .col-md-3.align-right
+                                    h4!=`${currencySymbol}${format.subtotal}`
+
+                            .row
+                                .col-md-9
+                                    h4 #{__('views.plan.vat', vatPercentage)}
+
+                                .col-md-3.align-right
+                                    h4!=`${currencySymbol}${format.vat}`
+                            
+                            .row
+                                .col-md-9
+                                    h4 #{__('views.plan.total')}
+
+                                .col-md-3.align-right
+                                    h4!=`${currencySymbol}${format.total}`
+
+                            .row
+                                .col-md-12
+                                    if(raw.total === 0)
+                                        form(
+                                            action=`/plans/${plan.id}/checkout/${organisation.slug}/complete-changeroo?_csrf=${csrfToken}`  
+                                            method="post"
+                                        )
+                                            input(type="hidden", name="amount" value=`${raw.total}`)
+                                            input(type="hidden", name="currency" value=`${currencyCode}`)
+                                            input(type="hidden", name="description", value=`plan-${plan.id}`)
+                                            input(type="hidden", name="transaction_description", value=`Changeroo plan ${plan.name}`)
+                                            input(type="hidden", name="language", value="en")
+                                            input(type="hidden", name="hash", value=`${hash}`)
+
+                                            button.btn.button.checkout-button(type="submit") #{__('views.plan.continue')}
+                                    else
+                                        form(
+                                            action="https://secure.paylane.com/order/cart.html",
+                                            method="post"
+                                        )
+                                            input(type="hidden", name="amount" value=`${raw.total}`)
+                                            input(type="hidden", name="currency" value=`${currencyCode}`)
+                                            input(type="hidden", name="merchant_id", value=`${process.env.PAYLANE_MERCHANT_ID}`)
+                                            input(type="hidden", name="description", value=`plan-${plan.id}`)
+                                            input(type="hidden", name="transaction_description", value=`Changeroo plan ${plan.name}`)
+                                            input(type="hidden", name="transaction_type", value="S")
+                                            input(type="hidden", name="back_url", value=`${back_url}`)
+                                            input(type="hidden", name="language", value="en")
+                                            input(type="hidden", name="hash", value=`${hash}`)
+                                            input(type="hidden", name="customer_name", value=`${stakeholder.full_name}`)
+                                            input(type="hidden", name="customer_email", value=`${stakeholder.email}`)
+                                            input(type="hidden", name="customer_country", value=`${countryCode}`)
+
+                                            button.btn.button.checkout-button(type="submit") #{__('views.plan.pay-with-paylane')}

@@ -1,0 +1,25 @@
+mixin newFreeOrganisationModal(stakeholder)
+    .container.modal__container.modal__container--new-free-organisation.to-foreground  
+        .modal__overlay
+            .modal.modal--new-free-organisation
+                span.modal--closer &times;
+                .modal__inner 
+                    h2 #{__('views.page-titles.new-organisation')}
+                    .modal--new-organisation__form
+                        form.new-organisation__form(
+                            action=`/organisations/create-free?_csrf=${csrfToken}` method="POST")
+                            .form-group
+                                if(locals.flashes.error && locals.flashes.error[0].name)
+                                    p.input__error #{locals.flashes.error[0].name[0]}
+                                    
+                                label(for="name") 
+                                    i.fa.fa-sitemap(aria-hidden="true" title=__('views.organisation.organisation-name1'))
+                                    span.fa-padding-left-from-icon #{__('views.organisation.organisation-name2')}
+                                span.validation!= `Name should be between 4 and 30 characters`
+                                input.form-control(type="text" name="name")    
+                            
+                            input(type="hidden" name="username" value=stakeholder.username)
+                            input.btn.button(type="submit" value=__('views.buttons.new-organisation'))
+
+                
+                

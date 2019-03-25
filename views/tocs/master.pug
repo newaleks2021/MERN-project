@@ -1,0 +1,77 @@
+extends ../master
+
+include ../mixins/_contentHeader
+include ../mixins/modals/_confirmationModal
+include ../mixins/modals/_moveTocModal
+include ../mixins/modals/_copyTocModal
+
+block content
+    .inner__overlay.to-mid
+    +contentHeader(title)
+    .container-fluid.content__container.content__container-js.to-mid.no-padding
+        .container
+            .content__inner
+                .toc.dashboard
+                    .dashboard__functionalities-slider.dashboard__item.to-mid(data-tooltip='Click to see options').to-foreground
+                        i.fa.fa-cog
+                        span.fa-padding-left Options
+             
+                    .dashboard__functionalities
+                        if(sessionMember && sessionMember.isAdmin || user.isAdmin)
+                            +confirmationModal(
+                                `/tocs/${toc.uuid}/switch${toc.isActivated ? '?deactivate=true' : ''}`
+                            )
+                            .dashboard__item.dashboard__functionality.modal--trigger(
+                                    data-modal='confirmation'
+                                )
+                                i.far.fa-circle.tt(
+                                    data-tooltip=`${toc.isActivated ? __('tooltips.is-activated') : __('tooltips.is-deactivated')}`
+                                    class=`${toc.isActivated ? 'active' : 'inactive'}`
+                                )
+                                span.fa-padding-left!= toc.isActivated ? 'Deactivate' : 'Activate' 
+
+                            +moveTocModal(toc)
+                            .dashboard__item.dashboard__functionality.modal--trigger(
+                                    data-modal='move-toc'
+                                )
+                                i.fa.fa-redo
+                                span.fa-padding-left #{__('views.buttons.toc-movement')}
+
+                            +copyTocModal(toc)
+                            .dashboard__item.dashboard__functionality.modal--trigger(
+                                    data-modal='copy-toc'
+                                )
+                                i.far.fa-copy
+                                span.fa-padding-left #{__('views.buttons.copy-toc')}
+
+                            .dashboard__item.dashboard__functionality
+                                a(href=`/tocs/${toc.uuid}/embed`)
+                                    i.far.fa-file-alt
+                                    span.fa-padding-left #{__('views.buttons.embed')}
+
+                    .row.dashboard__navigation.dashboard__section                    
+                        .dashboard__pages
+                            .dashboard__pages-switch.hidden-sm.hidden-md.hidden-lg.dashboard__page.dashboard__item.text-right
+                                i.fa.fa-bars 
+                                span.fa-padding-left Pages
+                            .dashboard__pages-inner.to-background
+                                if(user && user.isAdmin || sessionMember && sessionMember.isAdmin)
+                                    .dashboard__item.dashboard__page(class=title==`Edit ToC ${toc.name}` ? 'active': null)
+                                        a(href=`/tocs/${toc.uuid}/edit`, aria-label="Edit ToC")
+                                            i.fa.fa-edit.fa-padding-right(aria-hidden="true") 
+                                            span #{__('views.buttons.edit')}
+                                
+                                if(sessionMember || user && user.isAdmin)
+                                    .dashboard__item.dashboard__page(class=title==`Theory of Change ${toc.name} members` ? 'active': null)
+                                        a(href=`/tocs/${toc.uuid}/members`, aria-label=`${toc.name} members`)
+                                                i.fa.fa-users.fa-padding-right(aria-hidden="true") 
+                                                span #{__('views.table-titles.toc-members')}
+                                
+
+                                .dashboard__item.dashboard__page(class=title==`Theory of Change ${toc.name}` ? 'active': null)
+                                    a(href=`/tocs/${toc.uuid}`, aria-label=`${toc.name} profile`)
+                                        i.fa.fa-cog.fa-padding-right(aria-hidden="true") 
+                                        span #{__('views.page-titles.edit-toc')}
+
+
+                    block tocContent

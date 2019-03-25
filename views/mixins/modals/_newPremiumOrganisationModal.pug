@@ -1,0 +1,68 @@
+mixin newPremiumOrganisationModal(stakeholder, countriesList, plans, selectedPlan, modalIdentifier)
+    .container.modal__container.to-foreground(
+        class=modalIdentifier ? `modal__container--new-premium-organisation-${modalIdentifier}` : `modal__container--new-premium-organisation`
+    )
+        .modal__overlay
+            .modal(
+                    class=modalIdentifier ? `modal__container--new-premium-organisation-${modalIdentifier}` : `modal__container--new-premium-organisation`
+                )
+                span.modal--closer &times;
+                .modal__inner 
+                    h2 #{__('views.page-titles.new-organisation')}
+                    .modal--new-organisation__form
+                        form.new-organisation__form(
+                            action=`/organisations/create-premium?_csrf=${csrfToken}` method="POST")
+                            .form-group
+                                if(locals.flashes.error && locals.flashes.error[0].name)
+                                    p.input__error #{locals.flashes.error[0].name[0]}
+
+                                label(for="name") 
+                                    i.fa.fa-sitemap(aria-hidden="true" title=__('views.organisation.organisation-name1'))
+                                    span.fa-padding-left-from-icon #{__('views.organisation.organisation-name2')}
+                                span.validation!= `Name should be between 4 and 30 characters`
+                                input.form-control(type="text" name="name")  
+
+                            .form-group
+                                if(locals.flashes.error && locals.flashes.error[0].address)
+                                    p.input__error #{locals.flashes.error[0].address[0]}
+                                label(for="address") #{__('views.organisation.organisation-address')}
+                                input.form-control(type="text" name="address")
+                            
+                            .form-group
+                                label(for="country") #{__('views.organisation.organisation-country1')}
+                                select.form-control(name="country")
+                                    option(value=null disabled) #{__('views.organisation.organisation-country2')}
+                                    each country, index in countriesList
+                                        option(
+                                            value=country.country 
+                                            )!=`${country.country} | ${country.countryCode}`
+
+                            .form-group
+                                label(for="vat_number") #{__('views.organisation.organisation-vatnr')}
+                                input.form-control(type="text" name="vat_number")
+                            
+                            if(user && user.isAdmin)
+                                .form-group 
+                                    label(for="plan_id") #{__('views.organisation.organisation-current-plan')}
+                                    select.form-control(name="plan_id")
+                                        option(value=null disabled) #{__('views.organisation.organisation-default-plan')}
+                                        each plan in plans
+                                            option(
+                                                value=plan.id
+                                                )!=`${plan.name}`
+                            else
+                                .form-group 
+                                    label(for="plan_id") #{__('views.organisation.organisation-current-plan')}
+                                    select.form-control(name="plan_id")
+                                        each plan in plans
+                                            if(plan.id === selectedPlan)
+                                                option(
+                                                    value=plan.id
+                                                    )!=`${plan.name}`
+
+
+                            input(type="hidden" name="modalIdentifier" value=modalIdentifier)
+                            input(type="hidden" name="username" value=stakeholder.username)
+                            input.btn.button(type="submit" value="Create new organisation →")
+                
+                

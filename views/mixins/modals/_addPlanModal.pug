@@ -1,0 +1,48 @@
+mixin addPlanModal()
+    .container.modal__container.modal__container--new-plan.to-foreground  
+        .modal__overlay
+            .modal.modal--new-plan
+                span.modal--closer &times;
+                .modal__inner 
+                    h2 New plan
+                    .modal--form
+                        form.new-plan__form(
+                            action=`/plans/create?_csrf=${csrfToken}` method="POST")
+                            .form-group
+                                label(for="name") 
+                                    i.fas.fa-columns(aria-hidden="true" title=__('views.plan.plan-name1'))
+                                    span.fa-padding-left-from-icon #{__('views.plan.plan-name2')}
+                                input.form-control(type="text" name="name")   
+                                br
+
+                                label(for="price") 
+                                    i.fas.fa-euro-sign(aria-hidden="true" title=__('views.plan.plan-price1'))
+                                    span.fa-padding-left-from-icon #{__('views.plan.plan-price2')}
+                                input.form-control(type="number" name="price")  
+                                br
+
+                                label(for="period") 
+                                    i.far.fa-clock(aria-hidden="true" title=__('views.plan.plan-period2'))
+                                    span.fa-padding-left-from-icon #{__('views.plan.plan-period')}
+                                input.form-control(type="number" name="period")  
+                                br
+
+                                label(for="currency") 
+                                    i.far.fa-money-bill-alt(aria-hidden="true" title=__('views.plan.plan-currency1'))
+                                    span.fa-padding-left-from-icon #{__('views.plan.plan-currency2')}
+                                select.form-control(type="text" name="currency")
+                                    option(value="eur") Euro
+                                 
+                                br
+
+                                label(for="max_tocs") 
+                                    i.fas.fa-sort-numeric-down(aria-hidden="true" title=__('views.plan.plan-max-tocs1'))
+                                    span.fa-padding-left-from-icon #{__('views.plan.plan-max-tocs2')}
+                                input.form-control(type="number" name="max_tocs")  
+                                br
+
+                        
+                            input.btn.button(type="submit" value=__('views.buttons.create-plan-button'))
+
+                
+                

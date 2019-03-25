@@ -1,0 +1,65 @@
+//- Mailing 2A: Sent upon opening a Free trial Organisation account
+//- Template: SENDGRID_INFORMATIONAL_TEMPLATE_ID (no button, 1 body)
+
+p!=`Hi ${stakeholder.full_name},`
+p Your 30 day trial has started.
+p You have access to every feature of Changeroo during your trial. That’s plenty of time to see if it’s right for you. After the trial, you’ll need to upgrade your account to keep your Theory of Change active.
+
+p
+  strong ** 24 Hour Special Offer **
+
+span Get two years of Changeroo for the price of one and save hundreds of Euros.
+= ' '
+a(
+    href=`${process.env.PROTOCOL}${host}/plans/${organisation.slug}`, 
+    aria-label='Claim yours now'
+) Claim yours now
+= ' '
+span by using the coupon 
+  strong
+    i “yeah”
+
+p 
+  strong Ready to login?
+a(
+    href=`${process.env.PROTOCOL}${host}/stakeholders/${stakeholder.username}/tocs`, 
+    aria-label='Create your Theory of Change'
+) Create your Theory of Change
+= ' '
+span to plan, track and refine your impact strategies for a better world.
+
+p
+  strong Want some help?
+a(
+    href=`${process.env.PROTOCOL}${host}/toc-academy/posts/changeroo-tour-academy`, 
+    aria-label='Watch the tour'
+) Watch the tour
+= ' '
+span You’ll discover the layout, where to find helpful tutorials and more.
+
+p
+  span Visit the
+  = ' '
+  a(
+    href=`${process.env.PROTOCOL}${host}/toc-academy`, 
+    aria-label='ToC Academy'
+  ) ToC Academy
+  = ' ' 
+  span to
+  = ' '
+  a(
+    href=`${process.env.PROTOCOL}${host}/toc-academy/posts/changeroo-tutorial-overview`, 
+    aria-label='access tutorials'
+  ) access tutorials
+  = ' '
+  span for Changeroo and learn more about Theory of Change in general.
+
+p Enjoy,
+span - The Changeroo crew
+
+p P.S. Thanks for giving Changeroo a try!
+= ' '
+a(
+    href=`${process.env.PROTOCOL}${host}/plans/${organisation.slug}`, 
+    aria-label='Get a full year free'
+) Get a full year free

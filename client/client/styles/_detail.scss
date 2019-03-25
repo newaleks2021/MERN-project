@@ -1,0 +1,121 @@
+html[data-page="expert"], html[data-page="public-toc"] {
+    background-color: $grey-pale;
+
+	.expert {
+		display: flex;
+		flex-direction: column;
+		flex: 1 1 auto;
+		padding: 20px;
+		> nav {
+			flex: 1 1 70px;
+		}
+		> .content {
+			background-color: white;
+			box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.3);
+			padding: 40px 20px 0;
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			overflow: hidden;
+			position: relative;
+			.favorite {
+				width: 30px;
+				height: 30px;
+				z-index: 7;
+				background-repeat: no-repeat;
+				background-position: center center;
+				position: absolute;
+				background-size: 16px 16px;
+				top: 10px;
+				right: 10px;
+				border: 1px solid $silver;
+				background-color: $grey-pale;
+				border-radius: 5px;
+				cursor: pointer;
+				&.toggled {
+					background-image: url('/icon-starfilled.svg');    
+				}
+			}
+		}
+
+		form.inputs {
+			flex: 1 1 auto;
+			flex-direction: column;
+			align-items: stretch;
+			display: flex;
+			> div {
+				display: flex;
+				flex-direction: row;
+			}
+			input {
+				border: none;
+				padding: 0;
+				height: 30px;
+				display: flex;
+				flex: 1 1 auto;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				color: $grey-coal;
+				font-family: $roboto;
+				font-weight: $font-weight-light;
+				&[name="full_name"] { font-size: 26px; font-weight: $font-weight-medium; margin-bottom: 5px; }
+			}
+			.text {
+				font-weight: $font-weight-light;
+			}
+			label {
+				max-width: 25px;
+				flex: 0 0 25px;
+				height: 30px;
+				display: inline-block;
+				background-size: 12px 12px;
+				background-position: center left;
+				background-repeat: no-repeat;
+				&.position-short { background-image: url('/icon-briefcase-blue.svg'); }
+				&.position-long { background-image: url('/icon-diploma-blue.svg'); }
+				&.location { background-image: url('/icon-placeholder-blue.svg'); }
+				&.linkedin { background-image: url('/icon-linkedin-blue.svg'); }
+			}
+		}
+		.nav-buttons {
+			display: flex;
+			align-items: flex-start;
+			flex-direction: row;
+			flex: 1 1 auto;
+			margin: 30px 0;
+			width: 100%;
+			justify-content: space-between;
+			align-items: flex-end;
+			> button, a {
+				font-weight: $font-weight-regular;
+			}
+		}
+	}
+
+    @media(max-width: $breakpoint-tablet) {
+		
+		.expert {
+			.content {
+				flex-direction: column;
+			}
+			.image-container {
+				align-items: center;
+				padding: 0;
+			}
+			.image { margin: 0 auto; }
+		}
+
+    }
+
+    @media(max-width: $breakpoint-mobile) {
+
+		.expert {
+			padding: 0;
+			.content {
+				padding: 10px 20px;
+			}
+		}
+
+	}
+
+}

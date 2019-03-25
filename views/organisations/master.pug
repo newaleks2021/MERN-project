@@ -1,0 +1,29 @@
+extends ../master
+
+include ../mixins/_contentHeader
+
+block content
+    .inner__overlay.to-mid
+    +contentHeader(title)
+    .container-fluid.content__container.to-mid.content__container-js.no-padding
+        .container
+            .content__inner
+                .organisation.dashboard
+                    .row.dashboard__navigation.dashboard__section
+                        .dashboard__pages
+                            .dashboard__pages-switch.hidden-sm.hidden-md.hidden-lg.dashboard__page.dashboard__item.text-right
+                                i.fa.fa-bars 
+                                span.fa-padding-left Pages
+                            .dashboard__pages-inner.to-background
+                                if(user.isAdmin || isOrganisationAdmin)
+                                .dashboard__item.dashboard__page(class=title==`Edit organisation ${organisation.name}` ? 'active': null)
+                                        a(href=`/organisations/${organisation.slug}/edit`, aria-label=__('views.navigation.edit-stakeholder'))
+                                            i.fa.fa-edit.fa-padding-right(aria-hidden="true") 
+                                            span Edit
+
+                                .dashboard__item.dashboard__page(class=title==`Organisation ${organisation.name}` ? 'active': null)
+                                    a(href=`/organisations/${organisation.slug}`, aria-label=`${organisation.name} profile`)
+                                        i.fa.fa-user-circle.fa-padding-right(aria-hidden="true") 
+                                        span #{__('views.page-titles.show-organisation')}
+
+                    block organisationContent

@@ -1,0 +1,147 @@
+extends ../master
+
+include ../mixins/_contentHeader
+include ../mixins/_topicIcon
+
+block content
+    .inner__overlay.to-mid
+    if(title == "Topic: Events")
+        +contentHeader(`Events`)
+    else
+        +contentHeader(title)
+    .container-fluid.content__container.content__container-js.to-mid
+        .container
+            .content__inner.toc-academy__inner
+                .row
+                    if(title == "Topic: Events")
+                        .col-xs-8.topic-single
+                            each post, index in topic.posts 
+                                - const {image__avatar} = post.acf.general[0]
+                                - const {organiser, when, where} = post.acf.general[0].details_events[0]
+                                .row.topic__row(class=`topic__row-${index}`)
+                                    .topic__inner-overlay(class=`inner-${index}`)
+                                        .topic__inner-overlay-inner
+                                            .toc-academy__event-meta 
+                                                .toc-academy__event-when 
+                                                    i.far.fa-clock
+                                                    span.fa-padding-left-from-icon!= when
+                                                .toc-academy__event-where 
+                                                    i.fa.fa-map
+                                                    span.fa-padding-left-from-icon!= where
+                                                .toc-academy__event-organiser 
+                                                    i.fa.fa-user
+                                                    span.fa-padding-left-from-icon!= organiser
+
+                                        .topic__inner-overlay-divider
+                                            span.topic__inner-overlay-arrow &darr;
+
+                                        .topic__inner-overlay-inner
+                                            if(user && user.isAdmin)
+                                                a.text-right(href=`mailto:${post.acf.about_you[0].email_address}`)!= post.acf.about_you[0].name
+                                                span.text-right!= `${post.date.split("T")[0]}`
+                                            
+                                    .topic__inner-overlay.trigger(class=`trigger-${index}`)
+                                        span.text-center &uarr;
+
+                                    a.topic-post(href=`/toc-academy/posts/${post.slug}`)
+                                        .col-xs-3
+                                            .topic-single__avatar.toc-academy-avatar(
+                                                class=image__avatar ? '' : 'no-image'
+                                                style=image__avatar ? `background-image:url('${image__avatar}')` : ''
+                                                data-name=post.acf.general[0].title_of_your_postresource.charAt(0)
+                                            )
+                                        .col-xs-9
+                                            h3
+                                                +topicIcon(post.acf.general[0].type, post.acf.sticky_key_resource, post.acf.changeroo_resource)
+                                                if(post.acf.changeroo_resource)
+                                                    span.fa-padding-left-from-image!= post.acf.general[0].title_of_your_postresource
+                                                else
+                                                    span.fa-padding-left-from-icon!= post.acf.general[0].title_of_your_postresource
+
+                                            p!= post.acf.the_resource[0].summary
+                        
+                    else
+                        .col-xs-8.topic-single
+                            h2!= topic.fullTopic
+                            each post, index in topic.posts 
+                                - const {image__avatar} = post.acf.general[0]
+                                
+                                .row.topic__row(class=`topic__row-${index}`)
+                                    .topic__inner-overlay(class=`inner-${index}`)
+                                        .topic__inner-overlay-inner 
+                                            .topic__inner-author
+                                                div
+                                                    strong Author / source:  
+                                                div
+                                                    a(href=post.acf.general[0].source_url target='_blank')
+                                                        if(post.acf.general[0].details_resource)
+                                                            span!= post.acf.general[0].details_resource[0].authorsource
+                                            if(user && user.isAdmin)
+                                                .post-sticky
+                                                    strong Sticky: 
+                                                    span!= post.acf.sticky_key_resource ? '&#x2714' : '&times;'
+
+                                        .topic__inner-overlay-divider
+                                            
+                                            
+                                            span.topic__inner-overlay-arrow &darr;
+
+                                        .topic__inner-overlay-inner
+                                            if(post && post.acf && post.acf.general && post.acf.general[0].details_resource && post.acf.general[0].details_resource[0].publication_date)
+                                                span.text-right!= `${post.acf.general[0].details_resource[0].publication_date}`
+                                            if(user && user.isAdmin)
+                                                a.text-right(href=`mailto:${post.acf.about_you[0].email_address}`)!= post.acf.about_you[0].name
+                                                span.text-right!= `${post.date.split("T")[0]}`
+                                            
+                                    .topic__inner-overlay.trigger(class=`trigger-${index}`)
+                                        span.text-center &uarr;
+
+                                    a.topic-post(href=`/toc-academy/posts/${post.slug}`)
+                                        .col-xs-3
+                                            .topic-single__avatar.toc-academy-avatar(
+                                                class=image__avatar ? '' : 'no-image'
+                                                style=image__avatar ? `background-image:url('${image__avatar}')` : ''
+                                                data-name=post.acf.general[0].title_of_your_postresource.charAt(0)
+                                            )
+                                        .col-xs-9
+                                            h3
+                                                +topicIcon(post.acf.general[0].type, post.acf.sticky_key_resource, post.acf.changeroo_resource)
+                                                if(post.acf.changeroo_resource)
+                                                    span.fa-padding-left-from-image!= post.acf.general[0].title_of_your_postresource
+                                                else
+                                                    span.fa-padding-left-from-icon!= post.acf.general[0].title_of_your_postresource
+
+                                            p!= post.acf.the_resource[0].summary
+                        
+                    .col-xs-1
+                    .col-xs-3.toc-academy__sidebar-wrapper
+                        .toc-academy__sidebar-inner
+                                .row 
+                                    .col-xs-3
+                                    .col-xs-9
+                                        a.button(href='/toc-academy') &larr; Back to ToC Academy
+                                br
+                                .row 
+                                    h4.text-right Search posts in topic
+                                    br
+                                    .col-xs-12 
+                                        .form-group 
+                                            form(action=`/toc-academy/topics/${topic.uuid}/search?_csrf=${csrftoken}` method='GET')
+                                                input.form-control(type='text' name='query' placeholder='Search... ')
+                                                button(type='submit') 
+                                                    i.fa.fa-search
+                                br
+                                .row 
+                                    h4.text-right Filter in topic by language
+                                    br
+                                    .col-xs-12.sidebar__languages 
+                                        each language in languages 
+                                            a.sidebar__language(
+                                                href=(currentLanguage == language) ? 
+                                                    `/toc-academy/topics/${topic.uuid}` : `/toc-academy/topics/${topic.uuid}?language=${language}`
+                                                class=currentLanguage && (currentLanguage === language) ? 'active' : ''
+                                            )!= language
+                            
+                            
+                            
+            br

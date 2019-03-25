@@ -1,0 +1,63 @@
+extends ./master
+
+block tocContent 
+    .row.dashboard__section.profile__main
+        .col-md-3.col-sm-1
+        .profile__about.col-md-6.col-sm-10
+            .col-lg-3.col-sm-4.col-xs-12
+                .profile__avatar.avatar(
+                    style= toc.avatar ? `background-image:url('/uploads/${toc.avatar}')` : null 
+                    class= !toc.avatar ? 'avatar--placeholder placeholder--toc' : null
+                    data-name=toc.name
+                )
+            .col-lg-8.col-sm-7.col-sm-offset-1.col-xs-12
+                .profile__title
+                    h3.profile__name.toc_name #{toc.name}
+
+                .profile__bio
+                    span!= toc.about
+        .col-md-3.col-md-offset-1.col-sm-1.no-padding.profile__social.text-center
+
+        .col-xs-12.no-padding.social__wrapper
+            .col-md-3.col-xs-1
+            .col-md-6.col-xs-10.social__wrapper__inner
+                if(toc.website)
+                    a(target='_blank' href=toc.website || '/#', class=toc.website ? 'active' : '') 
+                        i.fa.fa-link.fa-padding-right(title=__('views.social-media.website2') aria-hidden="true")
+
+                if(toc.facebook)
+                    a(target='_blank' href=toc.facebook || '/#', aria-label=__('views.social-media.facebook2') class=toc.facebook ? 'active' : '')
+                        i.fab.fa-facebook-square(aria-hidden="true")
+                
+                if(toc.google_plus)
+                    a(target='_blank' href=toc.google_plus || '/#', aria-label=__('views.social-media.google-plus2') class=toc.google_plus ? 'active' : '')
+                        i.fab.fa-google-plus-square(aria-hidden="true")
+                        
+                if(toc.instagram)
+                    a(target='_blank' href=toc.instagram || '/#', aria-label=__('views.social-media.instagram2') class=toc.instagram ? 'active' : '')
+                        i.fab.fa-instagram(aria-hidden="true")
+                
+                if(toc.linkedin)
+                    a(target='_blank' href=toc.linkedin || '/#', aria-label=__('views.social-media.linkedin2') class=toc.linkedin ? 'active' : '')
+                        i.fab.fa-linkedin(aria-hidden="true")
+                
+                if(toc.twitter)
+                    a(target='_blank' href=toc.twitter || '/#', aria-label=__('views.social-media.twitter2') class=toc.twitter ? 'active' : '')
+                        i.fab.fa-twitter-square(aria-hidden="true")
+
+            .col-md-3.col-xs-1
+
+            .col-xs-4
+            .col-xs-4.text-center
+                if(hasRoleInOrganisation)
+                    a.organisation-link(href=`/organisations/${organisation.get('slug')}`)!=`${organisation.get('name')}`
+                else
+                    span!=`${organisation.get('name')}`
+                hr 
+                br 
+                a.button(target='_blank' href=`${process.env.WEB_APP_URL}/project/${toc.uuid}`) Go to Theory of Change
+
+            .col-xs-4
+
+            .col-xs-12
+                

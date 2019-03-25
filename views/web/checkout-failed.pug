@@ -1,0 +1,19 @@
+extends ../master
+
+include ../mixins/_contentHeader
+
+block content
+    .inner__overlay.to-mid
+    +contentHeader('Payment failed')
+    .container-fluid.content__container.content__container-js.to-mid
+        .container
+            .col-xs-2
+            .col-xs-8.pages__inner
+                h1 Payment failure
+                br 
+                h3.
+                    Unfortunately the payment has failed to process. Please verify that you have not been charged.
+                    For more information please or support <a href='/contact'>contact us</a> here.
+
+                .not-found__monster
+            .col-xs-2

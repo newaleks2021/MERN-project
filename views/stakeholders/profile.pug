@@ -1,0 +1,184 @@
+extends ./master
+
+include ../mixins/modals/_confirmationModal
+
+block stakeholderContent
+    .row.dashboard__section.profile__main
+        .col-md-3.col-sm-1.hidden-xs
+                    
+        // ----- ABOUT
+        .profile__about.col-md-6.col-sm-9.col-xs-12
+            .col-lg-3.col-sm-4.col-xs-12
+                .profile__avatar.avatar(
+                    style= stakeholder.avatar ? `background-image:url('/uploads/${stakeholder.avatar}')` : null 
+                    class= !stakeholder.avatar ? 'avatar--placeholder placeholder--stakeholder' : null
+                    data-name=stakeholder.full_name)
+                    if(stakeholder.isVerified)
+                        .profile__is-verified.tt(data-tooltip='This stakeholder is verified')
+                            i.fa.fa-check
+            .col-lg-8.col-sm-7.col-sm-offset-1.col-xs-12
+                .profile__title
+                    h3.profile__name.stakeholder__full-name #{stakeholder.full_name} 
+                        if(stakeholder.location)
+                            .profile__location
+                                i.fas.fa-map-marker-alt.fa-padding-right(title="Stakeholder Location" aria-hidden="true")
+                                p #{stakeholder.location}
+                    h4.stakeholder__function 
+                        strong!= stakeholder.function ? stakeholder.function : __('views.stakeholder.function')
+
+                    .profile__bio
+                        strong About me:  
+                        span!= stakeholder.bio ? stakeholder.bio : 'This stakeholder has no bio yet.'
+
+        .col-md-2.col-md-offset-1.col-sm-1.col-xs-12.no-padding.profile__edit.text-center
+            if(user && (user.id == stakeholder.id || user.isAdmin))
+                a(href=`/stakeholders/${stakeholder.username}/edit`, aria-label=__('views.navigation.edit-stakeholder'))
+
+                    i.fa.fa-edit.fa-padding-right(aria-hidden="true") 
+                    span #{__('views.navigation.edit')}
+
+        .col-xs-12.no-padding.social__wrapper
+            .col-md-3.col-xs-1
+            .col-md-6.col-xs-10.social__wrapper__inner
+                if(user && (user.isAdmin || user.id == stakeholder.id))
+                    a(target='_blank' href=`mailto:${stakeholder.email}` || '/#', class=stakeholder.email ? 'active' : '') 
+                        i.fa.fa-envelope.fa-padding-right(title=__('views.stakeholder.email-label2') aria-hidden="true")
+                
+                if(stakeholder.website)
+                    a(target='_blank' href=stakeholder.website || '/#', class=stakeholder.website ? 'active' : '') 
+                        i.fa.fa-link.fa-padding-right(title=__('views.social-media.website2') aria-hidden="true")
+
+                if(stakeholder.facebook)
+                    a(target='_blank' href=stakeholder.facebook || '/#', aria-label=__('views.social-media.facebook2') class=stakeholder.facebook ? 'active' : '')
+
+                        i.fab.fa-facebook-square(aria-hidden="true")
+                
+                if(stakeholder.google_plus)
+                    a(target='_blank' href=stakeholder.google_plus || '/#', aria-label=__('views.social-media.google-plus2') class=stakeholder.google_plus ? 'active' : '')
+
+                        i.fab.fa-google-plus-square(aria-hidden="true")
+                        
+                if(stakeholder.instagram)
+                    a(target='_blank' href=stakeholder.instagram || '/#', aria-label=__('views.social-media.instagram2') class=stakeholder.instagram ? 'active' : '')
+
+                        i.fab.fa-instagram(aria-hidden="true")
+                
+                if(stakeholder.linkedin)
+                    a(target='_blank' href=stakeholder.linkedin || '/#', aria-label=__('views.social-media.linkedin2') class=stakeholder.linkedin ? 'active' : '')
+
+                        i.fab.fa-linkedin(aria-hidden="true")
+                
+                if(stakeholder.twitter)
+                    a(target='_blank' href=stakeholder.twitter || '/#', aria-label=__('views.social-media.twitter2') class=stakeholder.twitter ? 'active' : '')
+
+                        i.fab.fa-twitter-square(aria-hidden="true")
+            .col-md-3.col-xs-1
+
+        .col-xs-12
+            .col-xs-1
+            hr.col-xs-10
+            .col-xs-1
+
+        .col-xs-12
+            p.stakeholder__expertise.text-center!= `${stakeholder.expertise ? stakeholder.expertise : __('views.stakeholder.no-expertise')}`
+
+    if(userTocRoles && userTocRoles.length > 0)
+        .row.dashboard__section 
+            .col-md-3
+            .col-md-6
+                table.table
+                    tr 
+                        th
+                        th 
+                            //TODO: Internationalisation
+                            p Toc
+                        th 
+                            p Roles
+
+                    each role in userTocRoles 
+                        - const tocFromRole = userTocs.find(t => t.id == role.toc_id)
+                        if(tocFromRole)
+                            tr 
+                                td
+                                    .index-view__avatar.avatar(
+                                        style= tocFromRole.avatar ? `background-image:url('/uploads/${tocFromRole.avatar}')` : null 
+                                        class= !tocFromRole.avatar ? 'avatar--placeholder placeholder--toc' : null
+                                        data-name=tocFromRole.name)
+                                td 
+                                    a(href=`/tocs/${tocFromRole.uuid}`)!=tocFromRole.name
+                                td 
+                                    .toc-members__roles                                
+                                        //TODO: Don't show if stakeholder doesn't have role or add if admin
+                                        if(role.isAdmin)
+                                            +confirmationModal(`/stakeholders/${stakeholder.username}/remove-toc-role/${role.toc_id}?role=admin`, `remove-${stakeholder.username}-admin`)
+                                            a.modal--trigger.toc-members__role.fa.fa-cog.fa-padding-right.tt(
+                                                data-modal=`confirmation-remove-${stakeholder.username}-admin`
+                                                data-tooltip='Remove your role as admin'
+                                            )
+                                        if(role.isModerator)
+                                            +confirmationModal(`/stakeholders/${stakeholder.username}/remove-toc-role/${role.toc_id}?role=moderator`, `remove-${stakeholder.username}-moderator`)
+                                            a.modal--trigger.toc-members__role.fa.fa-star.fa-padding-right.tt(
+                                                data-modal=`confirmation-remove-${stakeholder.username}-moderator`
+                                                data-tooltip='Remove your role as moderator'
+                                            )
+                                        if(role.isMember)
+                                            +confirmationModal(`/stakeholders/${stakeholder.username}/remove-toc-role/${role.toc_id}?role=member`, `remove-${stakeholder.username}-member`)
+                                            a.modal--trigger.toc-members__role.fa.fa-user.tt(
+                                                data-modal=`confirmation-remove-${stakeholder.username}-member`
+                                                data-tooltip='Remove your role as member'
+                                            )
+            .col-md-3                           
+
+            
+
+
+    // ----- ADMIN FIELDS
+    if(user && user.isAdmin)
+        h3 #{__('views.table-titles.admin-fields')}
+        .profile__stats.dashboard__section.row
+            .col-sm-4.col-xs-12
+                h4 #{__('views.table-titles.rights')}
+                p <strong>#{__('views.stakeholder.is-activated2')} </strong>
+                    span!= stakeholder.isActivated ? '&#10003;' : '&times;'
+                
+                p <strong>#{__('views.stakeholder.activated_at')} </strong>
+                    span!=`${formatDate(stakeholder.activated_at)}`
+
+                p <strong>#{__('views.stakeholder.deactivated-at')} </strong>
+                    span!=`${formatDate(stakeholder.deactivated_at)}`
+
+                p <strong>#{__('views.stakeholder.is-system-admin2')} </strong>
+                    span!= stakeholder.isAdmin ? '&#10003;' : '&times;'
+
+                p <strong>#{__('views.stakeholder.has-used-free-trial')} </strong>
+                    span!= stakeholder.hasUsedFreeTrial ? '&#10003;' : '&times;'
+                
+
+            .col-sm-4.col-xs-12
+                h4 #{__('views.stakeholder.user-stats')}
+                p <strong>#{__('views.stakeholder.login-count')} </strong>
+                    span!=stakeholder.login_count
+
+                p <strong>#{__('views.stakeholder.last_login')} </strong>
+                    span!=`${formatDate(stakeholder.last_login_at)}`
+                
+                p <strong>#{__('views.stakeholder.created_at')} </strong>
+                    span!=`${formatDate(stakeholder.created_at)}`
+                
+                p <strong>#{__('views.stakeholder.last_updated')} </strong>
+                    span!=`${formatDate(stakeholder.custom_updated_at)}`
+
+            .col-sm-4.col-xs-12
+                h4 #{__('views.stakeholder.user-resets')}
+                p <strong>#{__('views.stakeholder.new-email')} </strong>
+
+                    span #{stakeholder.new_email}
+
+                p <strong>#{__('views.stakeholder.new-activation-sent-at')} </strong>
+
+                    span!=`${formatDate(stakeholder.activation_sent_at)}`
+                
+                p <strong>#{__('views.stakeholder.password-reset-sent-at')} </strong>
+
+                    span!=`${formatDate(stakeholder.reset_sent_at)}`
+            

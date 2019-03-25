@@ -1,0 +1,30 @@
+mixin loginForm()
+    .login-form__wrapper
+        h2.form__title Login
+        form(action=`/auth/login` method="POST" autocomplete="off")        
+            .form-group
+                label(for="email")
+                    i.far.fa-envelope(aria-hidden="true" title=__('views.stakeholder.email-label1'))
+                    span.fa-padding-left-from-icon #{__('views.stakeholder.email-label2')}
+                input.form-control(type="email" autocomplete="email" name="email" value=oldInput.email || '')
+
+            .form-group
+                label(for="password")
+                    i.fa.fa-key(aria-hidden="true" title=__('views.stakeholder.password-label1'))
+                    span.fa-padding-left-from-icon #{__('views.stakeholder.password-label2')}
+                input(type='password' style='display: none')
+                input(type="hidden" value=csrfToken name="_csrf")
+                input.form-control(
+                    type="password" 
+                    autocomplete="off" 
+                    name="password" 
+                )
+                
+            .login__bottom
+                input.btn.no-padding.col-md-6.col-xs-12.button(type="submit" name="submit" value=__('views.buttons.login-button'))
+                .col-xs-12.col-md-6.login__options.no-padding
+                    .login__remember-me
+                        input(type="checkbox" name="remember_me")
+                        label(for="remember-me") #{__('views.login-and-signup.remember-me-label')}
+                    a.login__forgot-password #{__('views.login-and-signup.forgot-password')}
+                

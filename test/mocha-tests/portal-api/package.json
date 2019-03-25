@@ -1,0 +1,17 @@
+{
+  "name": "portal-api-monitoring",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "assert": "^1.4.1",
+    "axios": "^0.18.0",
+    "mocha": "^5.1.0"
+  }
+}

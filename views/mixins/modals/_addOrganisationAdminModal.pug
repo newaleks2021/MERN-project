@@ -1,0 +1,20 @@
+mixin addOrganisationAdminModal(organisation)
+    .container.modal__container.modal__container--add-organisation-admin.to-foreground
+        .modal__overlay
+            .modal.modal--add-organisation-admin
+                span.modal--closer &times;
+                .modal__inner
+                    h2 Invite an admin to #{organisation.name}
+                    .modal--form
+                        form.new-toc-member__form(action=`/organisations/${organisation.slug}/add-admin?_csrf=${csrfToken}` method='POST')
+                            .form-group
+                                label(for="email")
+                                    i.fas.fa-columns(aria-hidden="true" title=__('views.stakeholder.user-email-label'))
+                                    span.fa-padding-left-from-icon #{__('views.stakeholder.user-email-label')}
+                                input.form-control(type="text" name="email")
+
+                            input.btn.button(type="submit" value=__('views.navigation.invite-org-admin'))
+
+
+
+

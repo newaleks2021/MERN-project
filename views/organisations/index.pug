@@ -1,0 +1,162 @@
+extends ../master
+
+include ../mixins/_contentHeader
+include ../mixins/_pagination
+include ../mixins/modals/_confirmationModal
+
+block content
+    .inner__overlay.to-mid
+    +contentHeader(title)
+    .container-fluid.content__container.content__container-js.to-mid
+        .container
+            .content__inner
+                .dashboard
+                    .row.dashboard__section
+                        if(organisations)
+                            .search-container.col-xs-6.no-padding
+                                input.search-input(placeholder='search...' name='search' type='text' data-url=url)
+                                a.search-submit
+                                    i.fa.fa-search.fa-padding-left
+                            
+                            .table-scroll.col-xs-6.no-padding
+                                p
+                                    i.fas.fa-arrows-alt-h
+                                    span.fa-padding-left Scroll left and right to see more
+                            .table__wrapper        
+                                table.organisations__table.table
+                                    tr
+                                        th
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'name' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=name&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.organisation.organisation-name3')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'address' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=address&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.organisation.organisation-address')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'country' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=country&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.organisation.organisation-country1')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'website' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=website&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.organisation.organisation-website')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'vat_number' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=vat_number&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.organisation.organisation-vatnr')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'isValidVatNumber' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=isValidVatNumber&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.organisation.organisation-isvalidvatnr')}
+                                        
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'plan_name' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=plan_name&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.plan.plan-name2')}
+                                        
+                                        th 
+                                            p #{__('views.organisation.organisation-toc-amount')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'subs_exp_date' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=subs_exp_date&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.organisation.organisation-subs-exp-date')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'isActivated' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=isActivated&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.toc.is-activated')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'activated_at' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=activated_at&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.stakeholder.activated_at')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'created_at' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=created_at&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.stakeholder.created_at')}
+                                        th
+                                            p #{__('views.table-columns.actions')}
+
+                                        
+                                    each organisation, index in organisations
+                                        tr
+                                            td
+                                                .index-view__avatar.avatar(
+                                                    style= organisation.avatar ? `background-image:url('/uploads/${organisation.avatar}')` : null 
+                                                    class= !organisation.avatar ? 'avatar--placeholder placeholder--organisation' : null
+                                                    data-name=organisation.name)
+
+                                            td 
+                                                a(href=`/organisations/${organisation.slug}`)!=organisation.name
+
+                                            td
+                                                p!=organisation.address
+
+                                            td
+                                                p!=organisation.country
+
+                                            td
+                                                p!=organisation.website
+
+                                            td
+                                                p!=organisation.vat_number 
+
+                                            td
+                                                p!=organisation.isValidVatNumber
+
+                                            td 
+                                                p!=organisation.plan_name
+
+                                            td 
+                                                p!=`${organisation.toc_amount} of ${organisation.max_tocs}`
+
+                                            td
+                                                p!=formatDate(organisation.subs_exp_date)
+                                            td
+                                                i.far.fa-circle.tt(
+                                                    data-tooltip=`${organisation.isActivated ? __('tooltips.is-activated') : __('tooltips.is-deactivated')}`
+                                                    class=`${organisation.isActivated ? 'active' : 'inactive'}`
+                                                )
+                                            td
+                                                p!=formatDate(organisation.activated_at)
+                                            td
+                                                p!=formatDate(organisation.created_at)
+
+                                            td
+                                                a(href=`/organisations/${organisation.slug}/edit`)
+                                                    i.fas.fa-pencil-alt.fa-padding-right(aria-hidden="true") 
+
+                                                +confirmationModal(`/organisations/${organisation.slug}/destroy`, `destroy-organisation-${organisation.slug}`)
+                                                a
+                                                    i.fas.fa-trash-alt.fa-padding-right.modal--trigger(
+                                                        aria-hidden="true",
+                                                        data-modal=`confirmation-destroy-organisation-${organisation.slug}`
+                                                    ) 
+                                +pagination(
+                                    pagination, 
+                                    url
+                                )
+
+                        else 
+                            h3 No organisations

@@ -1,0 +1,18 @@
+mixin inviteStakeholderAsAdminToOrganisationModal(stakeholder, userOrganisations)
+    .container.modal__container.modal__container--invite-as-admin-to-organisation.to-foreground  
+        .modal__overlay
+            .modal.modal--invite-as-admin-to-organisation
+                span.modal--closer &times;
+                .modal__inner 
+                    h2 Add stakeholder to organisation:
+                    form(action=`/stakeholders/${stakeholder.username}/invite-as-admin-to-organisation?_csrf=${csrfToken}` method='POST')
+                        .form-group
+                            label(for="organisation_id") Please choose one of your organisations:
+                            select(name="organisation_id")
+                                each organisation in userOrganisations
+                                    option(value=organisation.id)!=organisation.name
+
+                        .form-group
+                            input.btn.button(type="submit" value="Add →")
+
+    

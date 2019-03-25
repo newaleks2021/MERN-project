@@ -1,0 +1,20 @@
+//- Mailing 10: Hit a ToC limit
+//- Template: SENDGRID_INFORMATIONAL_TEMPLATE_WITH_BUTTON_ID (1 button, 2 bodies)
+//- Sent upon creating a new ToC if at that moment the organisation reaches its maximum number of ToCs. Send to user who just created that ToC.
+//- But it's not sent if the subscription plan allows for only 1 ToC.
+//- Should set a flag in the form of a date. And this email should never be sent twice within 10 days.
+
+p!=`Hi ${stakeholder.full_name},`
+p Wow!
+p You’ve been so productive that you’ve reached the maximum number of ToC’s for your account.
+p!=`Your current plan is: ${plan.name} which provides ${plan.max_tocs} Theories of Change.`
+p As you can see, Changeroo makes it easy to involve stakeholders and make your ToC’s more achievable.
+
+if(nextPlan)
+    p!=`If you’d like to set up more ToC’s, simply upgrade your account to the ${nextPlan.name} or higher.`
+else
+    p If you’d like to set up more ToC’s, please contact us.
+------------------------------------
+p Thanks for using our tool!
+p Regards,
+span - The Changeroo crew

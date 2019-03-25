@@ -1,0 +1,51 @@
+//- Mailing 5: Trial expiry warning, 5 days to go
+//- Template: SENDGRID_INFORMATIONAL_TEMPLATE_WITH_BUTTON_ID (1 button, 2 bodies)
+//- CRON: For organisation with a 'free plan' account that expires in 5 days. Only for activated organisations. Sends to all admins of that organisation (they need to be 'activated' users).
+//- Is a flag needed in the db?
+
+p!=`Hi ${stakeholder.full_name},`
+p Your trial ends in 5 days.
+p After that, you won’t be able to edit, collaborate or share your Theory of Change anymore.
+p But don’t worry, all your work is saved. 
+span I hope you’ve enjoyed powerful Changeroo features like
+=' ' 
+a(
+    href=`${process.env.PROTOCOL}${host}/toc-academy/posts/tutorial-strategy-narratives`, 
+    aria-label=`strategy narratives`
+) strategy narratives
+=', '
+a(
+    href=`${process.env.PROTOCOL}${host}/toc-academy/posts/tutorial-nested-tocs`, 
+    aria-label=`nested ToCs`
+) nested ToCs
+=', '
+a(
+    href=`${process.env.PROTOCOL}${host}/toc-academy/posts/tutorial-grouping`, 
+    aria-label=`grouping`
+) grouping
+=', and '
+a(
+    href=`${process.env.PROTOCOL}${host}/toc-academy/posts/tutorial-relationships`, 
+    aria-label=`block relationships`
+) block relationships
+='.'
+
+p
+    strong Ready to make the next step?
+p By now, you should see why Changeroo makes Theory of Change co-creation, collaboration and sharing a snap. 
+p It’s the best way to improve your impact strategies using critical reflection and to create a shared learning experience with stakeholders throughout the entire journey.
+p Upgrade now for 295 Euros and enjoy Changeroo for a full year.
+------------------------------------
+p
+    strong We would love to hear your feedback
+span We'd love to hear your thoughts on your trial experience in this
+=' '
+a(
+    href=`https://goo.gl/forms/z7zi3TRrz1f5uXbb2`, 
+    aria-label=`super quick survey`
+) super quick survey
+='.'
+span It only takes 30 seconds. Your response will help us focus on improving your trial experience and better meet your needs.
+p Thanks for giving Changeroo a try!
+p Regards,
+span - The Changeroo crew

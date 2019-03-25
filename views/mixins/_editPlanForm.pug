@@ -1,0 +1,44 @@
+mixin editPlanForm(plan)
+    .plan__form.form
+        form(action=`/plans/${plan.id}/edit?_csrf=${csrfToken}` method='POST')
+            .plan__form-top.row.form__top
+                .col-xs-1
+                .col-xs-10
+                    .col-md-6.col-xs-12
+                        h3.form__title #{__('views.page-titles.edit-plan')}
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].name)
+                                p.input__error #{locals.flashes.error[0].name[0]}
+                            label(for="name") #{__('views.plan.plan-name2')}
+                            input.form-control(type="text" name="name" value=plan.name)
+                        
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].price)
+                                p.input__error #{locals.flashes.error[0].price[0]}
+                            label(for="price") #{__('views.plan.plan-price2')}
+                            input.form-control(type="text" name="price" value=plan.price)
+
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].currency)
+                                p.input__error #{locals.flashes.error[0].currency[0]}
+                            label(for="currency") #{__('views.plan.plan-currency2')}
+                            select.form-control(name="currency")
+                                option(value=plan.currency) Euro
+
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].max_tocs)
+                                p.input__error #{locals.flashes.error[0].max_tocs[0]}
+                            label(for="max_tocs") #{__('views.plan.plan-max-tocs2')}
+                            input.form-control(type="text" name="max_tocs" value=plan.max_tocs)
+
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].period)
+                                p.input__error #{locals.flashes.error[0].period[0]}
+                            label(for="period") #{__('views.plan.plan-period2')}
+                            input.form-control(type="text" name="period" value=plan.period)
+
+
+                    .col-md-6.col-xs-12
+                        .form-group 
+                            input.btn.button(type="submit" value=__('views.buttons.save-changes'))
+                                

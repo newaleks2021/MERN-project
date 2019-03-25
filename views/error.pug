@@ -1,0 +1,6 @@
+extends master
+
+block error
+  h2= status
+  p= message
+  pre.error!= stackHighlighted

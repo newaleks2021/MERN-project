@@ -1,0 +1,125 @@
+extends ../master
+
+include ../mixins/_contentHeader
+include ../mixins/_pagination
+include ../mixins/modals/_confirmationModal
+include ../mixins/modals/_newCouponModal
+
+block content
+    +newCouponModal(plans)
+    -
+      const formatMoney = function(n, c, d, t){
+        var c = isNaN(c = Math.abs(c)) ? 2 : c, 
+        d = d == undefined ? "," : d, 
+        t = t == undefined ? "." : t, 
+        s = n < 0 ? "-" : "", 
+        i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
+        j = (j = i.length) > 3 ? j % 3 : 0;
+        
+        return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+      };
+
+    .inner__overlay.to-mid
+    +contentHeader(title)
+    .container-fluid.content__container.content__container-js.to-mid
+        .container
+            .content__inner
+                .dashboard
+                    .row.dashboard__section
+                        if(coupons)
+                            .search-container.col-xs-6.no-padding
+                                input.search-input(placeholder='search...' name='search' type='text' data-url=url)
+                                a.search-submit
+                                    i.fa.fa-search.fa-padding-left
+                            
+                            .table-scroll.col-xs-6.no-padding.align-right
+                                a.button.add-link.modal--trigger(data-modal='new-coupon')
+                                    i.far.fa-plus-square.fa-padding-right(aria-hidden="true")
+                                    span #{__('views.coupon.new-coupon')}
+                            .table__wrapper        
+                                table.transactions__table.table
+                                    tr
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'code' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=code&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.coupon.code')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'description' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=description&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.coupon.description')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'discount_amount' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=discount_amount&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.coupon.discount-amount')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'discount_percentage' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=discount_percentage&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.coupon.discount-percentage')}
+                                            
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'max_use' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=max_use&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.coupon.max-use')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'exp_date' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=exp_date&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.coupon.exp-date')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'created_at' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=created_at&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.stakeholder.created_at')}
+
+                                        th
+
+                                    - var today = new Date();
+                                    each coupon, index in coupons
+                                        tr
+                                            td 
+                                                p!=coupon.code
+
+                                            td
+                                                p!=coupon.description
+
+                                            td
+                                                p!=`€${formatMoney(coupon.discount_amount, 2)}`
+
+                                            td
+                                                p!=`${coupon.discount_percentage}%`
+
+                                            td
+                                                p!=coupon.max_use
+
+                                            td
+                                                p!= (coupon.exp_date) ? coupon.exp_date.toISOString().slice(0,10) : ""
+
+                                            td 
+                                                p!=coupon.created_at
+
+                                            td
+                                                if(coupon.exp_date > today || coupon.exp_date === null)
+                                                    +confirmationModal(`/coupons/${coupon.code}/expire`, `expire-coupon-${coupon.code}`, `Are you sure you want to expire the coupon ${coupon.code}?`)
+                                                    a
+                                                        i.far.fa-calendar-times.fa-padding-right.modal--trigger(
+                                                            aria-hidden="true",
+                                                            data-modal=`confirmation-expire-coupon-${coupon.code}`
+                                                        ) 
+
+                                +pagination(
+                                    pagination, 
+                                    url
+                                )
+
+                        else 
+                            h3 No coupons

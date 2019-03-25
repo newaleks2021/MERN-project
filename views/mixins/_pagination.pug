@@ -1,0 +1,8 @@
+mixin pagination({pageCount, page}, url)
+    .pagination
+        each pageIndexZero in [...Array(pageCount).keys()]
+            - const pageIndex = pageIndexZero+1
+            if(page == pageIndex)
+                span.page(href=`${url}page=${pageIndex}`)!= pageIndex
+            else
+                a.page(href=`${url}page=${pageIndex}`)!= pageIndex

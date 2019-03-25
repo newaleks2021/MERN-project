@@ -1,0 +1,7 @@
+extends ./master
+
+include ../mixins/_editOrganisationForm
+
+block organisationContent
+    .row.dashboard__section.dashboard__section-inner
+        +editOrganisationForm(organisation, members, countriesList)

@@ -1,0 +1,87 @@
+extends ./master
+
+include ../mixins/modals/_newTocFromOrganisationModal
+include ../mixins/modals/_newTocModal
+include ../mixins/modals/_confirmationModal
+
+block stakeholderContent
+    +newTocModal(stakeholder, allOrganisations)
+    .row.dashboard__section.dashboard__section-inner
+        if(organisations.length == 0)
+            .dashboard__no-resources
+                .no-organisations__wrapper
+                    if(user.id == stakeholder.id || user.isAdmin)
+                        h1!= user.isAdmin ? __('views.toc.no-toc2', stakeholder.full_name) : __('views.toc.no-toc3')
+
+                        if(allOrganisations && allOrganisations.length > 0)
+                            a.button.modal--trigger(data-modal='new-toc' data-username=stakeholder.username)
+                                i.far.fa-plus-square
+                                span.modal--trigger(data-modal='new-toc' data-username=stakeholder.username).fa-padding-left #{__('views.buttons.new-toc')}
+                        else if (allOrganisations && allOrganisations.length == 0)
+                            h4!= stakeholder.id == user.id ? __('views.toc.no-organisation5', stakeholder.username) : __('views.toc.no-organisation4', stakeholder.username)
+
+        else
+            .col-xs-12
+                .dashboard__top
+                    h3!= user.isAdmin ? __('views.toc.user-his-tocs', stakeholder.full_name) : __('views.toc.my-tocs')
+
+                    if((stakeholder.id == user.id || user.isAdmin) && allOrganisations.length > 0)
+                        a.button.add-link.stakeholder__toc__add.modal--trigger(data-modal='new-toc' data-username=stakeholder.username)
+                            i.far.fa-plus-square.fa-padding-right(aria-hidden="true")
+                            span #{__('views.buttons.new-toc')}
+
+
+                each organisation in organisations
+                    table.stakeholder-toc__table.table
+                        tr
+                            th
+
+                            th
+                                p #{organisation.name}
+                            th
+                                p #{organisation.plan.name}
+                            th
+                                p!=__('views.organisation.expiration-date', formatDate(organisation.subs_exp_date))
+                            th
+                                if((stakeholder.id == user.id && organisation.isAdmin) || user.isAdmin)
+                                    if((organisation.hasRemainingTocs && !organisation.isExpired) || user.isAdmin)
+                                        +newTocFromOrganisationModal(stakeholder, organisation.id, organisation.id, organisation.name)
+                                        i.far.fa-plus-square.fa-padding-right(aria-hidden="true")
+                                        span.modal--trigger(data-modal=`new-toc-from-org-${organisation.id}` data-username=stakeholder.username) #{__('views.buttons.new-toc')}
+
+                                    else
+                                        a(style='color: white;'
+                                          href=`/plans/${organisation.slug}`) #{__('views.buttons.upgrade-plan')}
+
+                        each toc in organisation.tocs
+                            tr
+                                td
+                                    .index-view__avatar.avatar(
+                                        style= toc.avatar ? `background-image:url('/uploads/${toc.avatar}')` : null
+                                        class= !toc.avatar ? 'avatar--placeholder placeholder--toc' : null
+                                        data-name=toc.name
+                                    )
+                                td
+                                    a(href=`/tocs/${toc.uuid}`) #{toc.name}
+                                td
+                                    if(toc.roles.isAdmin)
+                                        p.toc-members__role.fa.fa-cog.fa-padding-right.tt(
+                                            data-tooltip='This stakeholder is admin'
+                                        )
+                                    if(toc.roles.isModerator)
+                                        p.toc-members__role.fa.fa-star.fa-padding-right.tt(
+                                            data-tooltip='This stakeholder is moderator'
+                                        )
+                                    if(toc.roles.isMember)
+                                        p.toc-members__role.fa.fa-user.tt(
+                                            data-tooltip='This stakeholder is member'
+                                        )
+                                td
+                                    i.far.fa-circle.tt(
+                                        data-tooltip=`${toc.isActivated ? __('tooltips.is-activated') : __('tooltips.is-deactivated')}`
+                                        class=`${toc.isActivated ? 'active' : 'inactive'}`
+                                    )
+
+                                td
+
+

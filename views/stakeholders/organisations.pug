@@ -1,0 +1,71 @@
+extends ./master
+
+include ../mixins/modals/_newPremiumOrganisationModal
+
+block stakeholderContent 
+    .row.dashboard__section.dashboard__section-inner
+        if(organisations.length == 0)
+            .dashboard__no-resources
+                .no-organisations__wrapper
+                    if(user.isAdmin)
+                        h1!= __('views.toc.no-organisation2', stakeholder.full_name)
+                        +newPremiumOrganisationModal(stakeholder, countriesList, plans)
+                        a.modal--trigger.button(
+                            data-modal='new-premium-organisation'
+                            data-instant-toggle=(newPremiumOrganisationModalErrors)
+                        )
+                            i.far.fa-plus-square(aria-hidden="true")
+                                span.modal--trigger(data-modal='new-premium-organisation').fa-padding-left #{__('views.buttons.new-organisation')}
+
+                    else if(user.id == stakeholder.id)
+                        h1!= __('views.toc.no-organisation3')
+
+                        a.button(href='/plans') 
+                            i.far.fa-plus-square
+                            span.fa-padding-left #{__('views.buttons.new-organisation')}
+                    else
+                        h1!= __('views.toc.no-organisation2', stakeholder.full_name)
+
+                        a.button(href='/plans') 
+                            i.far.fa-plus-square
+                            span.fa-padding-left #{__('views.buttons.new-organisation')}
+
+        else
+            .col-xs-12
+                .dashboard__top
+                    h3!= `${stakeholder.id == user.id ? __('views.organisation.your-organisations') : __('views.organisation.your-organisations', stakeholder.full_name)}` 
+                    
+                    if(stakeholder.id == user.id || user.isAdmin)
+                        if(user.isAdmin)
+                            +newPremiumOrganisationModal(stakeholder, countriesList, plans)
+                            a.modal--trigger.button(
+                                data-modal='new-premium-organisation'
+                                data-instant-toggle=(newPremiumOrganisationModalErrors)
+                            )
+                                i.far.fa-plus-square(aria-hidden="true")
+                                    span.modal--trigger(data-modal='new-premium-organisation').fa-padding-left #{__('views.buttons.new-organisation')}
+                        else
+                            
+                            a.button(href='/plans') 
+                                i.far.fa-plus-square(aria-hidden="true")
+                                    span.fa-padding-left #{__('views.buttons.new-organisation')}
+
+                .dashboard__list.col-xs-12.no-padding
+                    each organisation in organisations
+                        a.col-md-6.col-sm-12(href=`/organisations/${organisation.slug}`)
+                            .stakeholder__organisation
+                                .col-xs-2.no-padding.avatar__wrapper.align-middle
+                                    .avatar(
+                                        style= organisation.avatar ? `background-image:url('/uploads/${organisation.avatar}')` : null 
+                                        class= !organisation.avatar ? 'avatar--placeholder placeholder--organisation' : null
+                                        data-name=organisation.name
+                                    )
+                                .col-xs-8.full-height
+                                    .organisation__plan__wrapper
+                                        span.organisation__plan!=organisation.plan
+                                    h4.organisation__name!=organisation.name
+                                    
+                                .col-xs-2.no-padding.full-height.max-users
+                                    i.fa.fa-padding-right.fa-users
+                                    h4!=`${organisation.memberCount}/${process.env.MAX_ORGANISATION_MEMBERS}`
+                                        

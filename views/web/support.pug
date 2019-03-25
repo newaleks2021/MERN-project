@@ -1,0 +1,46 @@
+extends ../master
+
+include ../mixins/_contentHeader      
+
+block content
+    .inner__overlay.to-mid
+    +contentHeader(title)
+    .container-fluid.content__container.content__container-js.to-mid
+        .container.pages__inner
+            if(supportOrganisations && supportOrganisations.length > 0)
+                - 
+                    const chunks = []
+                    let i = 0
+                    let columns = 3
+                    while(i < supportOrganisations.length)
+                    {
+                        chunks.push(supportOrganisations.slice(i, i += columns))
+                    }
+
+                each chunk in chunks
+                    .row
+                        .support-organisations
+                            each org in chunk 
+                                .col-lg-4.col-md-6.col-xs-12.support-organisation
+                                    a(href=org.link ? org.link : '#' target='_blank').support-organisation__inner
+                                        h3!= org.name
+                                        .support-org-logo(
+                                            style= org.logo ? `background-image:url('/uploads/${org.logo}')` : null 
+                                            class= !org.logo ? 'avatar--placeholder placeholder--support' : null
+                                            data-name=org.name
+                                        )
+                                        p.support-organisation__description!= org.description
+                                        br
+                                        if(org.specialisation_tags && org.specialisation_tags.length > 0)
+                                            h4 Specialisation tags
+                                            .col-xs-12.no-padding.tags-wrapper
+                                                each tag in org.specialisation_tags
+                                                    span.spec-tag.tag!= `${tag}&nbsp;`
+                                            br
+                                        if(org.countries && org.countries.length > 0)
+                                            h4 Countries
+                                            .col-xs-12.no-padding.tags-wrapper
+                                                each country in org.countries
+                                                    span.country-tag.tag!= `${country}&nbsp;`
+                                            br
+                                        .clearfix

@@ -1,0 +1,152 @@
+include ./modals/_confirmationModal
+
+mixin editTocForm(toc, members, sessionMember)
+    .toc__form.form
+        form(action=`/tocs/${toc.uuid}/edit?_csrf=${csrfToken}` method='POST' id="edit_toc_form" enctype="multipart/form-data")
+            .toc__form-top.row.form__top
+                .col-xs-1
+                .col-xs-10
+                    .col-md-6.col-xs-12
+                        h3.form__title #{__('views.page-titles.edit-toc')}
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].name)
+                                p.input__error #{locals.flashes.error[0].name[0]}
+                            label(for="name") #{__('views.toc.toc-name3')}
+                            input.form-control(type="text" name="name" value=oldInput.name ? oldInput.name : toc.name)
+
+                        .form-group
+                            label(for="about") #{__('views.toc.toc-about')}
+                            textarea.form-control(
+                                form="edit_toc_form" rows="5" name="about"
+                                value=oldInput.about ? oldInput.about : toc.about
+                            ) #{toc.about}
+                        br
+
+                        if(toc.avatar)
+                            h4 Current avatar:
+                                .form-group
+                                    .edit-view__avatar.avatar(
+                                        style= toc.avatar ? `background-image:url('/uploads/${toc.avatar}')` : null
+                                        class= !toc.avatar ? 'avatar--placeholder placeholder--toc' : null
+                                        data-name=toc.name)
+
+                            input(type="checkbox" name="delete_avatar")
+                            label(for="delete_avatar") #{__('views.stakeholder.stakeholder-avatar2')}
+
+                            br
+
+                        .form-group
+                            label(for="avatar") #{__('views.toc.toc-avatar1')}
+                            input.form-control(type="file" name="avatar" accept="image/png, image/jpeg, image/gif")
+                        br
+
+                        .form-group
+                            label #{__('views.toc.toc-visibility')}
+                            br
+                            input#visibility-public(
+                            type="radio" name="visibility" value="1"
+                            checked=(toc.visibility === 1 ? true : undefined)
+                            )
+                            label(for="visibility-public") #{__('views.toc.toc-visibility-public')}
+                            br
+                            input#visibility-private(
+                            type="radio" name="visibility" value="0"
+                            checked=(toc.visibility === 0 ? true : undefined)
+                            )
+                            label(for="visibility-private") #{__('views.toc.toc-visibility-private')}
+                        br
+
+                        if(user.isAdmin || sessionMember)
+                            +confirmationModal(`/tocs/${toc.uuid}/deactivate`, 'deactivate-toc')
+                            .form-group
+                                a.modal--trigger(data-modal='confirmation-deactivate-toc') #{__('views.confirmation-modal.close-toc')}
+
+                        br
+
+
+                    .col-md-6.col-xs-12
+                        h3.form__title Social
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].website)
+                                p.input__error #{locals.flashes.error[0].website[0]}
+                            label(for="website") #{__('views.social-media.website')}
+                            input.form-control(
+                                type="text" name="website" placeholder=__('views.forms.protocol-prefix')
+                                value=oldInput.website ? oldInput.website : toc.website
+                            )
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].facebook)
+                                p.input__error #{locals.flashes.error[0].facebook[0]}
+                            label(for="facebook") #{__('views.social-media.facebook')}
+                            input.form-control(
+                                type="text" name="facebook" placeholder=__('views.forms.protocol-prefix')
+                                value=oldInput.facebook ? oldInput.facebook : toc.facebook
+                            )
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].google_plus)
+                                p.input__error #{locals.flashes.error[0].google_plus[0]}
+                            label(for="google_plus") #{__('views.social-media.google-plus')}
+                            input.form-control(
+                                type="text" name="google_plus" placeholder=__('views.forms.protocol-prefix')
+                                value=oldInput.google_plus ? oldInput.google_plus : toc.google_plus
+                            )
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].instagram)
+                                p.input__error #{locals.flashes.error[0].instagram[0]}
+                            label(for="instagram") #{__('views.social-media.instagram')}
+                            input.form-control(
+                                type="text" name="instagram" placeholder=__('views.forms.protocol-prefix')
+                                value=oldInput.instagram ? oldInput.instagram : toc.instagram
+                            )
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].linkedin)
+                                p.input__error #{locals.flashes.error[0].linkedin[0]}
+                            label(for="linkedin") #{__('views.social-media.linkedin')}
+                            input.form-control(
+                                type="text" name="linkedin" placeholder=__('views.forms.protocol-prefix')
+                                value=oldInput.linkedin ? oldInput.linkedin : toc.linkedin
+                            )
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].pinterest)
+                                p.input__error #{locals.flashes.error[0].pinterest[0]}
+                            label(for="pinterest") #{__('views.social-media.pinterest')}
+                            input.form-control(
+                                type="text" name="pinterest" placeholder=__('views.forms.protocol-prefix')
+                                value=oldInput.pinterest ? oldInput.pinterest : toc.pinterest
+                            )
+                        .form-group
+                            if(locals.flashes.error && locals.flashes.error[0].twitter)
+                                p.input__error #{locals.flashes.error[0].twitter[0]}
+                            label(for="twitter") #{__('views.social-media.twitter')}
+                            input.form-control(
+                                type="text" name="twitter" placeholder=__('views.forms.protocol-prefix')
+                                value=oldInput.twitter ? oldInput.twitter : toc.twitter
+                            )
+
+                        br
+
+                        .form-group
+                            input.btn.button(type="submit" value=__('views.buttons.save-changes'))
+
+                                //- +switchTocModal(`/tocs/${toc.id}/switch`)
+                                //- .form-group
+                                //-     a.modal--trigger(data-modal='switch-toc') Switch to different organisation
+
+                    .col-xs-1
+
+                    if(user.isAdmin)
+                        .toc__form-bottom.row
+                            .col-xs-1
+                            .col-xs-10.toc__form-admin_fields
+                                .col-xs-12
+                                    h3.form__title #{__('views.table-titles.admin-fields')}
+                                    .form-group
+                                        input.io-checkbox(type="checkbox" name="isActivated" value=toc.isActivated checked=(toc.isActivated ? true : undefined))
+                                        label(for="isActivated") #{__('views.toc.is-activated')}
+                                    .form-group
+                                        input.io-checkbox(type="checkbox" name="shouldBeDestroyed" value=toc.shouldBeDestroyed checked=(toc.shouldBeDestroyed ? true : undefined))
+                                        label(for="shouldBeDestroyed") #{__('views.toc.should-be-destroyed')}
+                                    .form-group
+                                        label(for="activated_at") Activated at:
+                                        input(type="datetime" name="activated_at" value=formatFormDate(toc.activated_at))
+                            .col-xs-1

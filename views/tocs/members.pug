@@ -1,0 +1,127 @@
+extends ./master
+
+include ../mixins/modals/_confirmationModal
+include ../mixins/modals/_addTocMemberModal
+
+block tocContent
+    .row.dashboard__section.dashboard__section-inner
+        if(user && sessionMember || user && user.isAdmin)
+            +addTocMemberModal(toc)
+            .col-xs-12.no-padding.add-member
+                a.button.modal--trigger(data-modal='add-toc-member')
+                    i.far.fa-plus-square(aria-hidden="true")
+                        span.fa-padding-left.modal--trigger(data-modal='add-toc-member') #{__('views.buttons.add-toc-member', toc.name)}
+                    
+
+        .col-xs-6.no-padding.toc__member-count
+            if(members)
+                - const memberCount = members.filter(m => m.isAdmin || m.isMember || m.isModerator).length
+                span!= `${memberCount} ${memberCount == 1 ? 'member' : 'members'}`
+        
+        
+        .table-scroll.col-xs-6.no-padding
+            p
+                i.fas.fa-arrows-alt-h
+                span.fa-padding-left Scroll left and right to see more
+        
+        .table__wrapper
+            table.toc-members__table.table
+                tr
+                    th
+                        p 
+                    th
+                        p #{__('views.table-columns.fullname')}
+
+                    th
+                        p #{__('views.table-columns.username')}
+
+                    th
+                        p Roles
+
+                    if(user.isAdmin || sessionMember)
+                        th
+                            p #{__('views.table-columns.actions')}
+
+                    
+                each member, index in members
+                    tr
+                        td                                        
+                            .index-view__avatar.avatar(
+                                style= member.avatar ? `background-image:url('/uploads/${member.avatar}')` : null 
+                                class= !member.avatar ? 'avatar--placeholder placeholder--stakeholder' : null
+                                data-name=member.full_name)
+                        td
+                            a(href=`/stakeholders/${member.username}`)!=member.full_name
+                        td  
+                            p!=member.username
+                        td
+                            .toc-members__roles
+                                if(member.isTocAdmin)
+                                    p.toc-members__role.fa.fa-cog.fa-padding-right.tt(
+                                        data-tooltip='This stakeholder is admin'
+                                    )
+                                if(member.isModerator)
+                                    p.toc-members__role.fa.fa-star.fa-padding-right.tt(
+                                        data-tooltip='This stakeholder is moderator'
+                                    )
+                                if(member.isMember)
+                                    p.toc-members__role.fa.fa-user.tt(
+                                        data-tooltip='This stakeholder is member'
+                                    )
+
+                        if(user.isAdmin || sessionMember)   
+                            td
+                                if(user.isAdmin || sessionMember.isAdmin || member.id == user.id)
+                                    ul                             
+                                        if(member.isTocAdmin)
+                                            li
+                                                +confirmationModal(`/stakeholders/${member.username}/remove-toc-role/${toc.uuid}?role=admin`, `remove-toc-admin-role--${member.username}`)
+                                                i.fa.fa-times.fa-padding-right(aria-hidden="true") 
+                                                a.modal--trigger(data-modal=`confirmation-remove-toc-admin-role--${member.username}`) #{__('views.role.destroy-admin-role')}
+                                        
+                                        if(!member.isTocAdmin && member.adminActivationSentAt)
+                                            li
+                                                +confirmationModal(`/stakeholders/${member.username}/remove-toc-role/${toc.uuid}?role=admin`, `remove-toc-admin-invitation--${member.username}`)
+                                                i.fa.fa-times.fa-padding-right(aria-hidden="true") 
+                                                a.modal--trigger(data-modal=`confirmation-remove-toc-admin-invitation--${member.username}`) #{__('views.role.destroy-invited-admin-role')}
+                                        
+                                        if(!member.isTocAdmin && member.adminActivationSentAt)
+                                            li
+                                                i.fa.fa-envelope.fa-padding-right(aria-hidden="true") 
+                                                a(href=`/stakeholders/${member.username}/resend-invite-for-toc/${toc.uuid}`) Resend admin invitation
+
+                                        if(member.isMember)
+                                            li
+                                                +confirmationModal(`/stakeholders/${member.username}/remove-toc-role/${toc.uuid}?role=member`, `remove-toc-member-role--${member.username}`)
+                                                i.fa.fa-times.fa-padding-right(aria-hidden="true") 
+                                                a.modal--trigger(data-modal=`confirmation-remove-toc-member-role--${member.username}`) #{__('views.role.destroy-member-role')}
+
+                                        if(!member.isMember && member.memberActivationSentAt)
+                                            li
+                                                +confirmationModal(`/stakeholders/${member.username}/remove-toc-role/${toc.uuid}?role=member`, `remove-toc-member-invitation--${member.username}`)
+                                                i.fa.fa-times.fa-padding-right(aria-hidden="true") 
+                                                a.modal--trigger(data-modal=`confirmation-remove-toc-member-invitation--${member.username}`) #{__('views.role.destroy-invited-member-role')}
+        
+                                        if(!member.isMember && member.memberActivationSentAt)
+                                            li
+                                                i.fa.fa-envelope.fa-padding-right(aria-hidden="true") 
+                                                a(href=`/stakeholders/${member.username}/resend-invite-for-toc/${toc.uuid}`) Resend member invitation
+
+                                        if(member.isModerator)
+                                            li
+                                                +confirmationModal(`/stakeholders/${member.username}/remove-toc-role/${toc.uuid}?role=moderator`, `remove-toc-moderator-role--${member.username}`)
+                                                i.fa.fa-times.fa-padding-right(aria-hidden="true") 
+                                                a.modal--trigger(data-modal=`confirmation-remove-toc-moderator-role--${member.username}`) #{__('views.role.destroy-moderator-role')}
+
+                                        if(!member.isModerator && member.moderatorActivationSentAt)
+                                            li
+                                                +confirmationModal(`/stakeholders/${member.username}/remove-toc-role/${toc.uuid}?role=moderator`, `remove-toc-moderator-invitation--${member.username}`)
+                                                i.fa.fa-times.fa-padding-right(aria-hidden="true") 
+                                                a.modal--trigger(data-modal=`confirmation-remove-toc-moderator-invitation--${member.username}`) #{__('views.role.destroy-invited-moderator-role')}
+
+                                        if(!member.isModerator && member.moderatorActivationSentAt)
+                                            li
+                                                i.fa.fa-envelope.fa-padding-right(aria-hidden="true") 
+                                                a(href=`/stakeholders/${member.username}/resend-invite-for-toc/${toc.uuid}`) Resend moderator invitation
+                                    
+                                    

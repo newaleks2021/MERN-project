@@ -1,0 +1,32 @@
+mixin newTocModal(stakeholder, organisations)
+    .container.modal__container.to-foreground(class=`modal__container--new-toc`)
+        .modal__overlay
+            .modal(class=`modal--new-toc`)
+                span.modal--closer &times;
+                .modal__inner 
+                    h2 #{__('views.page-titles.new-toc')}
+                    .modal--new-toc__form
+                        if(organisations && organisations.length > 0)
+                            form.new-toc__form(
+                                action=`/tocs/create?_csrf=${csrfToken}` method="POST")
+
+                                .form-group
+                                    label(for="name") 
+                                        i.fa.fa-sitemap(aria-hidden="true" title=__('views.toc.toc-name1'))
+                                        span.fa-padding-left-from-icon #{__('views.toc.toc-name2')}
+
+                                    input.form-control(type="text" name="name")    
+
+                                .form-group
+                                    label(for="organisation_id") #{__('views.role.choose-organisation')}
+
+                                    select(name="organisation_id")
+                                        each organisation in organisations
+                                            option(value=organisation.id)!=organisation.name
+                                br
+                                
+                                input(type="hidden" name="username" value=stakeholder.username)
+                                input.btn.button(type="submit" value=__('views.buttons.new-toc'))
+
+                
+                

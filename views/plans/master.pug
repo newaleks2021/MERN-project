@@ -1,0 +1,19 @@
+extends ../master
+
+include ../mixins/_contentHeader
+
+block content
+    .inner__overlay.to-mid
+    +contentHeader(title)
+    .container-fluid.content__container.content__container-js.to-mid
+        .container
+            .content__inner
+                .plan.dashboard
+                    .row.dashboard__navigation.dashboard__section
+                        .dashboard__pages
+                            .dashboard__item.dashboard__page(class=title==`All plans` ? 'active': null)
+                                a(href=`/plans/all`, aria-label=__('views.navigation.plans'))
+                                    i.fas.fa-columns.fa-padding-right(aria-hidden="true") 
+                                    span #{__('views.navigation.plans')}
+
+                    block planContent

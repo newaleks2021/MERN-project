@@ -1,0 +1,49 @@
+mixin signUpForm(validations)
+    h2.form__title #{__('views.page-titles.sign-up')}
+    form(action=`/auth/register?_csrf=${csrfToken}` method="POST")    
+        .form-group
+            if(locals.flashes.error && locals.flashes.error[0].full_name)
+                p.input__error #{locals.flashes.error[0].full_name[0]}
+
+            label(for="full_name") 
+                i.far.fa-address-book(aria-hidden="true" title=__('views.stakeholder.fullname1'))
+                span.fa-padding-left-from-icon #{__('views.stakeholder.fullname2')}
+            if(validations.full_name) 
+                span.validation!= `${validations.full_name.length.message}`
+            input.form-control(autocomplete='off' type="text" name="full_name" value=oldInput.full_name || '')
+
+        .form-group
+            if(locals.flashes.error && locals.flashes.error[0].email)
+                p.input__error #{locals.flashes.error[0].email[0]}
+
+            label(for="email")
+                i.far.fa-envelope(aria-hidden="true" title=__('views.stakeholder.email-label1'))
+                span.fa-padding-left-from-icon #{__('views.stakeholder.email-label2')}
+            if(validations.email) 
+                span.validation!= `${validations.email.lowercase.message}`
+            input.form-control(autocomplete='off' type="email" name="email" value=oldInput.email || '')
+
+        .form-group
+            if(locals.flashes.error && locals.flashes.error[0].username)
+                p.input__error #{locals.flashes.error[0].username[0]}
+
+            label(for="username")
+                i.fa.fa-user(aria-hidden="true" title=__('views.stakeholder.username1'))
+                span.fa-padding-left-from-icon #{__('views.stakeholder.username2')}
+            if(validations.username) 
+                span.validation!= `${validations.username.length.message}`
+            input.form-control(autocomplete='off' type="text" name="username" value=oldInput.username || '')
+
+        .form-group
+            if(locals.flashes.error && locals.flashes.error[0].password)
+                p.input__error #{locals.flashes.error[0].password[0]}
+                
+            label(for="password")
+                i.fa.fa-key(aria-hidden="true" title=__('views.stakeholder.password-label1'))
+                span.fa-padding-left-from-icon #{__('views.stakeholder.password-label2')}
+            if(validations.password) 
+                span.validation!= `${validations.password.length.message}`
+            input.form-control(autocomplete='off' type="password" name="password")
+        .col-xs-12.no-padding
+            .col-xs-6.no-padding.hidden-xs
+            input.col-md-6.col-xs-12.btn.button(type="submit" value=__('views.buttons.signup-button'))

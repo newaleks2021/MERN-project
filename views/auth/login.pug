@@ -1,0 +1,8 @@
+extends ./authFormWrapper
+
+include ../mixins/auth/_loginForm
+include ../mixins/auth/_forgotPasswordForm
+
+block authForm
+    +loginForm()
+    +forgotPasswordForm()

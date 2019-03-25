@@ -1,0 +1,39 @@
+//- Mailing 3B: All users, mid trial - account usage review
+//- This email will be expanded upon once we implement the discussion page feature.
+//- Template: SENDGRID_INFORMATIONAL_TEMPLATE_ID (no button, 1 body)
+//- CRON: 14 dagen na registratie; user moet een minimum aan activiteit hebben vertoond (anders "great job" vreemd) en 'activated' te zijn.
+//- Flag in database needed?
+
+p!=`Hi ${stakeholder.full_name},`
+
+if(counters.tocs > 0 && counters.blocks > 0)
+    p Great job.
+
+p It’s been 2 weeks since you signed up for Changeroo.
+p
+    strong Here’s what you’ve done:
+ul
+    li!=`${counters.tocs} Theories of Change that you’re part of`
+    li!=`${counters.blocks} blocks`
+    li!=`${counters.relationships} relationships`
+    li!=`${counters.narratives} strategy narrative pages`
+
+p Changeroo allows you to create interactive Theories of Change that engage stakeholders and ignite passion for your cause.
+p A strong impact strategy that everyone can get behind. One that looks beyond what you do and control, and incorporates how other actors affect achievement of the vision of success.
+p With powerful editing tools and collaboration, you can build Theories of Change that are robust, effective, and ultimately, allow for bigger impact.
+p So truly a living document that helps you foster a learning culture of critical thinking, analysis, reflection and co-creation.
+p Thanks for using our tool!
+p 
+    a(
+        href=`${process.env.PROTOCOL}${host}/stakeholders/${stakeholder.username}/tocs`, 
+        aria-label=`Admire your creations here.`
+    ) Admire your creations here.
+
+p Regards,
+span - The Changeroo crew
+p P.S. Want to learn more?
+=' '
+a(
+    href=`${process.env.PROTOCOL}${host}/toc-academy`, 
+    aria-label='Head over to the ToC Academy.'
+) Head over to the ToC Academy.

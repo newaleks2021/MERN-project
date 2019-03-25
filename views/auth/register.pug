@@ -1,0 +1,6 @@
+extends ./authFormWrapper
+
+include ../mixins/auth/_signUpForm
+
+block authForm
+    +signUpForm(validations)

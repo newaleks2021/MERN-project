@@ -1,0 +1,38 @@
+//- Mailing 8A: Subscription expires in 20 days
+//- Template: SENDGRID_INFORMATIONAL_TEMPLATE_WITH_BUTTON_ID (1 button, 2 bodies)
+//- CRON: Organisation has a subscription plan other than a free account that expires in 20 days. Organisation does NOT have autorenewal activated. Sends email to all organisation admins (users have to be 'activated').
+//- Is een db flag nodig? Lijkt mij niet, of je moet die flag weer resetten wanneer de expiration date van de organisatie wijzigt (zoals bij renewen, upgraden, of als system admin dat direct in organisatie profiel wijzigt).
+
+p!=`Hi ${stakeholder.full_name},`
+p
+    strong Your subscription to Changeroo expires in 20 days.
+
+p Unlike many services that auto-renew, Changeroo must be renewed manually. 
+p 
+    a(
+        href=`${process.env.PROTOCOL}${host}/plans/${organisation.slug}`, 
+        aria-label='Renew your subscription here'
+    ) Renew your subscription here.
+p Please take a few moments to enter your payment details so you continue to enjoy the design and collaboration features of Changeroo. 
+p If you don’t renew, your account will be deactivated and you won’t be able to edit your ToCs, share comments, invite users or read feedback from stakeholders.
+------------------------------------
+p
+    strong We would love to hear what you think of Changeroo
+span We'd love to hear your thoughts on your trial experience in this
+=' '
+a(
+    href=`https://goo.gl/forms/z7zi3TRrz1f5uXbb2`, 
+    aria-label='super quick survey'
+) super quick survey
+='.'
+span It only takes 30 seconds. Your response will help us focus on improving your trial experience and better meet your needs.
+p Thanks for using our tool!
+p Regards,
+span - The Changeroo crew
+br
+span P.S. You must renew your account manually.
+=' '
+a(
+    href=`${process.env.PROTOCOL}${host}/plans/${organisation.slug}`, 
+    aria-label='Renew here.'
+) Renew here.

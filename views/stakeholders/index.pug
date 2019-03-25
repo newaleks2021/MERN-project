@@ -1,0 +1,195 @@
+extends ../master
+
+include ../mixins/_contentHeader
+include ../mixins/_pagination
+include ../mixins/modals/_confirmationModal
+
+block content
+    .inner__overlay.to-mid
+    +contentHeader(title)
+    .container-fluid.content__container.content__container-js.to-mid
+        .container
+            .content__inner
+                .dashboard
+                    .row.dashboard__section
+                        if(stakeholders)
+                            .search-container.col-xs-6.no-padding
+                                input.search-input(placeholder='search...' name='search' type='text' data-url=url)
+                                a.search-submit
+                                    i.fa.fa-search.fa-padding-left
+                            
+                            .table-scroll.col-xs-6.no-padding
+                                p
+                                    i.fas.fa-arrows-alt-h
+                                    span.fa-padding-left Scroll left and right to see more
+                            .table__wrapper       
+                                table.stakeholders__table.table
+                                    tr
+                                        th
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'username' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=username&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.stakeholder.username2')}
+                                                                                
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'email' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=email&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.stakeholder.email-label2')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'full_name' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=full_name&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.stakeholder.fullname2')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'organisation' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=organisation&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.stakeholder.organisation')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'location' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=location&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.stakeholder.location')}
+
+                                        th
+                                            p.table-header #{__('views.stakeholder.user-roles')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'login_count' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=login_count&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.stakeholder.login-count')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'last_login_at' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=last_login_at&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.stakeholder.last_login')}
+                                        
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'hasUsedFreeTrial' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=hasUsedFreeTrial&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.stakeholder.has-used-free-trial')}
+                                        
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'created_at' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=created_at&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.stakeholder.created_at')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'updated_at' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=updated_at&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.stakeholder.updated_at')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'isActivated' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=isActivated&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.stakeholder.is-activated')}
+
+                                        th
+                                            a.table-header(
+                                                class=`${currentSort == 'activated_at' ? 'active' : ''}` 
+                                                href=`${baseUrl}sortBy=activated_at&sortOrder=${reverseSortOrder}`
+                                            ) #{__('views.stakeholder.activated_at')}
+                                        th
+                                            p #{__('views.table-columns.actions')}
+
+                                        
+                                    each stakeholder, index in stakeholders
+                                        tr
+                                            td
+                                                .index-view__avatar.avatar(
+                                                    style= stakeholder.avatar ? `background-image:url('/uploads/${stakeholder.avatar}')` : null 
+                                                    class= !stakeholder.avatar ? 'avatar--placeholder placeholder--stakeholder' : null
+                                                    data-name=stakeholder.full_name)
+
+                                            td 
+                                                a(href=`/stakeholders/${stakeholder.username}`)!=stakeholder.username
+                                            
+                                            td 
+                                                p!=stakeholder.email
+
+                                            td
+                                                p!=stakeholder.full_name
+
+                                            td
+                                                p!=stakeholder.organisation
+
+                                            td
+                                                p!=stakeholder.location
+                                            td
+                                                if(stakeholder.isAdmin)
+                                                    i.toc-members__role.fa.fa-server.tt(
+                                                    data-tooltip='This stakeholder is a system admin'
+                                                    )
+                                                if(stakeholder.isOrganisationAdmin)
+                                                    i.toc-members__role.fa.fa-sitemap.tt(
+                                                    data-tooltip='This stakeholder is an organisation admin'
+                                                    )
+                                                if(stakeholder.isTocAdmin)
+                                                    i.toc-members__role.far.fa-user-circle.tt(
+                                                    data-tooltip='This stakeholder is an admin of a ToC'
+                                                    )
+                                                if(stakeholder.isTocMember)
+                                                    i.toc-members__role.fa.fa-user.fa-padding-right.tt(
+                                                        data-tooltip='This stakeholder is member of a ToC'
+                                                    )
+                                                if(stakeholder.isTocModerator)
+                                                    i.toc-members__role.fas.fa-star.fa-padding-right.tt(
+                                                        data-tooltip='This stakeholder is moderator of a ToC'
+                                                    )
+
+
+                                            td
+                                                p!=stakeholder.login_count ? stakeholder.login_count : '0'
+
+                                            td 
+                                                p!=formatDate(stakeholder.last_login_at)
+
+                                            td
+                                                p!=stakeholder.hasUsedFreeTrial
+                                            td
+                                                p!=formatDate(stakeholder.created_at)
+                                            td
+                                                p!=formatDate(stakeholder.updated_at)
+
+                                            td 
+                                                if(stakeholder.activated_at)
+                                                    i.far.fa-circle.tt(
+                                                        class=`${stakeholder.isActivated ? 'active' : 'inactive'}`
+                                                        data-tooltip=`${stakeholder.isActivated ? __('tooltips.is-activated') : __('tooltips.is-deactivated')}`
+                                                    )
+                                                else 
+                                                    p Never activated
+
+                                            td
+                                                p!=formatDate(stakeholder.activated_at)
+
+                                            td
+                                                a(href=`/stakeholders/${stakeholder.username}/edit`)
+                                                    i.fas.fa-pencil-alt.fa-padding-right(aria-hidden="true") 
+
+                                                +confirmationModal(`/stakeholders/${stakeholder.username}/destroy`, `destroy-stakeholder-${stakeholder.username}`)
+                                                a
+                                                    i.fas.fa-trash-alt.fa-padding-right.modal--trigger(
+                                                        aria-hidden="true",
+                                                        data-modal=`confirmation-destroy-stakeholder-${stakeholder.username}`
+                                                    ) 
+
+                            +pagination(
+                                pagination, 
+                                url
+                            )
+
+                        else 
+                            h3 No stakeholders

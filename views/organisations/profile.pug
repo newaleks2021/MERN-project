@@ -1,0 +1,218 @@
+extends ./master
+
+include ../mixins/modals/_addOrganisationAdminModal
+include ../mixins/_date
+
+block organisationContent
+    -
+      const formatMoney = function(n, c, d, t){
+        var c = isNaN(c = Math.abs(c)) ? 2 : c,
+        d = d == undefined ? "," : d,
+        t = t == undefined ? "." : t,
+        s = n < 0 ? "-" : "",
+        i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+        j = (j = i.length) > 3 ? j % 3 : 0;
+
+        return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+      };
+
+    .row.dashboard__section.profile__main
+        .col-md-3.col-sm-1
+        .profile__about.col-md-6.col-sm-9
+            .col-lg-3.col-sm-4.col-xs-12
+                .profile__avatar.avatar(
+                    style= organisation.avatar ? `background-image:url('/uploads/${organisation.avatar}')` : null
+                    class= !organisation.avatar ? 'avatar--placeholder placeholder--organisation' : null
+                    data-name=organisation.name
+                )
+            .col-lg-8.col-sm-7.col-sm-offset-1.col-xs-12
+                .profile__title
+                    h3.profile__name.organisation__name #{organisation.name} </br>
+                    .organisation__plan__wrapper
+                        .organisation__plan!=plan.name
+                    p!=`${amountOfActiveTocs} of ${plan.max_tocs} active tocs used`
+
+                strong!= organisation.isValidVatNumber ? 'Valid VAT number' : 'Invalid VAT number'
+
+
+        .col-md-2.col-md-offset-1.col-sm-1.no-padding.profile__social.text-center
+
+
+    .row.dashboard__section
+        .col-xs-12.col-md-6
+            if(members && members.length > 0)
+                .col-xs-12.no-padding
+                    .col-xs-4.no-padding
+                        h3.form__title #{__('views.table-titles.admins')}
+
+                    .col-xs-8.add-organisation-admins
+                        if(members.length < process.env.MAX_ORGANISATION_MEMBERS)
+                            +addOrganisationAdminModal(organisation)
+                            a.button.modal--trigger(data-modal='add-organisation-admin')
+                                i.far.fa-plus-square
+                                span.fa-padding-left.modal--trigger(
+                                    data-modal='add-organisation-admin'
+                                ) #{__('views.organisation.add-admin', organisation.name)}
+
+                table.members__table.table
+                    tr
+                        th
+                            p
+                        th
+                            p #{__('views.table-columns.username')}
+                        th
+                            p #{__('views.table-columns.fullname')}
+                        th
+                            p #{__('views.toc.is-activated')}
+
+                    each member, index in members
+                        tr
+                            td
+                                .index-view__avatar.avatar(
+                                    style= member.avatar ? `background-image:url('/uploads/${member.avatar}')` : null
+                                    class= !member.avatar ? 'avatar--placeholder placeholder--stakeholder' : null
+                                    data-name=member.full_name)
+                            td
+                                a(href=`/stakeholders/${member.username}`)!=member.username
+                            td
+                                p!=member.full_name
+                            td
+
+                                i.far.fa-circle.tt(
+                                        class=`${member.isOrganisationAdmin ? 'active' : 'inactive'}`
+                                        data-tooltip=`${member.isOrganisationAdmin ? __('tooltips.is-activated') : __('tooltips.is-deactivated')}`
+                                    )
+
+            else
+                .col-xs-12.no-padding
+                    .col-xs-4.no-padding
+                        h3 #{__('views.organisation.organisation-no-admins')}
+                    .col-xs-8.add-organisation-admins
+                        +addOrganisationAdminModal(organisation)
+                        a.button.modal--trigger(data-modal='add-organisation-admin')
+                            i.far.fa-plus-square
+                            span.fa-padding-left.modal--trigger(
+                            data-modal='add-organisation-admin'
+                            ) #{__('views.organisation.add-admin', organisation.name)}
+
+        .col-xs-12.col-md-6
+            if(tocs && tocs.length > 0)
+                h3.form__title #{__('views.table-titles.tocs')}
+
+                table.members__table.table
+                    tr
+                        th
+                            p
+                        th
+                            p #{__('views.table-columns.toc-name')}
+
+
+                    each toc, index in tocs
+                        tr
+                            td
+                                .index-view__avatar.avatar(
+                                        style= toc.avatar ? `background-image:url('/uploads/${toc.avatar}')` : null
+                                        class= !toc.avatar ? 'avatar--placeholder placeholder--toc' : null
+                                        data-name=toc.name)
+                            td
+                                a(href=`/tocs/${toc.uuid}`)!=toc.name
+
+            else
+                h3 #{__('views.organisation.organisation-no-tocs')}
+
+    if(user.isAdmin || isOrganisationAdmin)
+    h3 #{__('views.table-titles.current-plan')}
+    .profile__stats.dashboard__section.row
+        .col-xs-6
+            .current-plan-overview
+                .current-plan-header
+                    h3!=plan.name
+
+                .current-plan-feature
+                    span #{__('views.organisation.expires-on')}
+                        =' '
+                        +date(organisation.subs_exp_date)
+
+                .current-plan-feature-alt
+                    span #{__('views.organisation.maximum-number-of-tocs', plan.max_tocs)}
+
+                .current-plan-feature
+                    span #{__('views.organisation.number-of-active-tocs', amountOfActiveTocs)}
+
+        .col-xs-6
+            a.full-width-button(href=`/plans/${organisation.slug}`)
+                i.far.fa-credit-card
+                span.fa-padding-left #{__('views.organisation.organisation-change-subscription')}
+            br
+            a.full-width-button(href=`/organisations/${organisation.slug}/edit`)
+                i.far.fa-edit
+                span.fa-padding-left #{__('views.organisation.organisation-update-payment-method')}
+            br
+
+    h3 #{__('views.table-titles.transaction-history')}
+    .row
+      .col-xs-12
+        if(transactions)
+          .table__wrapper
+            table.transactions__table.table
+              tr
+                th
+
+                th #{__('views.transaction.invoice-number')}
+
+                th #{__('views.transaction.amount-ex-vat')}
+
+                th #{__('views.transaction.amount-inc-vat')}
+
+                th #{__('views.plan.plan-name2')}
+
+                th #{__('views.coupon.code')}
+
+                th #{__('views.coupon.created-at')}
+
+                each transaction, index in transactions
+                  tr
+                    td
+                      a(
+                        target='_blank',
+                        href=`/organisations/${organisation.slug}/transaction/${transaction.id.toString().length}/${transaction.id}${transaction.paylane_id}/pdf`
+                      )
+                        i.far.fa-file-pdf
+
+                    td
+                      p!=`${transaction.id}${transaction.paylane_id}`
+
+                    td
+                      p!=`€${formatMoney(transaction.amount_ex_vat, 2)}`
+
+                    td
+                      p!=`€${formatMoney(transaction.amount_inc_vat, 2)}`
+
+                    td
+                      p!=transaction.plan_name
+
+                    td
+                      if(transaction.coupon_code)
+                        p!=transaction.coupon_code
+                      else
+                        p None
+
+                    td
+                      p!=`${transaction.created_at.toISOString().slice(0, 10)}`
+
+    if(user.isAdmin)
+        h3 #{__('views.table-titles.admin-fields')}
+        .profile__stats.dashboard__section.row
+            .col-xs-6
+                p
+                    i(class=`far fa-circle fa-padding-right ${organisation.isActivated ? 'active' : 'inactive'}`)
+                    if(organisation.isActivated)
+                        span!= `Activated at ${formatDate(organisation.activated_at)}`
+                    else
+                        span!= `Deactivated at ${formatDate(organisation.deactivated_at)}`
+
+            .col-xs-6
+                //TODO: transaction data
+
+        // TODO: transactions table
+

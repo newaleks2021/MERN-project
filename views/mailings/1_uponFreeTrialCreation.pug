@@ -1,0 +1,62 @@
+//- Mailing 1: Sent upon activating a free stakeholder account
+//- Template: SENDGRID_INFORMATIONAL_TEMPLATE_ID (no button, 1 body)
+
+p!=`Hi ${stakeholder.full_name},`
+p
+  strong Welcome to Changeroo
+
+span You can
+  = ' '
+  a(
+      href=`${process.env.PROTOCOL}${host}/auth/login`, 
+      aria-label='login here'
+  ) login here
+  = ' '
+  span to contribute and comment on public Theories of Change right away. 
+
+p
+  strong Want some help?
+
+p Changeroo contains a lot of guiding content. Watch this video to learn more about how to use this.
+
+a(
+    href=`${process.env.PROTOCOL}${host}/toc-academy/posts/changeroo-tour-academy`, 
+    aria-label='Watch the tour'
+) Watch the tour
+
+p
+  strong Want to create your own Theories of Change?
+
+a(
+    href=`${process.env.PROTOCOL}${host}/stakeholders/${stakeholder.username}/organisations`, 
+    aria-label='Upgrade to an organisation account'
+) Upgrade to an organisation account
+span  (Free for 30 days. No credit cards.)
+
+p
+  strong Already part of a team?
+  
+p Want to access your organisation’s Theories of Change? Ask your administrator to grant you access and you’re good to go.
+
+p Enjoy,
+span - The Changeroo crew
+
+p P.S. Thanks for using our tool. We hope you’ll stay in touch! Follow us on 
+a(
+    href='https://twitter.com/changeroo_com'
+    aria-label='Twitter'
+) Twitter
+= ' '
+a(
+    href='https://www.facebook.com/Changeroo-162037981241121/',
+    aria-label='Facebook'
+) Facebook
+= ' '
+span and
+= ' '
+a(
+    href='https://www.linkedin.com/company/changeroo_com/'
+    aria-label='LinkedIn'
+) LinkedIn
+= ' '
+span to keep up to date with new exciting changes.

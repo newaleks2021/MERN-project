@@ -1,0 +1,23 @@
+extends ./master
+
+include ./mixins/_contentHeader
+
+block content
+    .inner__overlay.to-mid
+    +contentHeader('404 not found')
+    .container-fluid.content__container.content__container-js.to-mid
+        .container
+            .col-xs-2
+            .col-xs-8.pages__inner
+                h1 AHHHHH! YOU FOUND ME!
+                br 
+                h3.
+                    Unfortunately you have also found an elusive 404 error page, 
+                    which means the page you were looking for is no longer here.
+
+                .not-found__monster
+                
+                h3.not-found__contact.
+                    Interested in Changeroo? We encourage you to <a href='/contact'>say hello</a> as soon as possible. 
+                    We can't wait to hear from you!
+            .col-xs-2
